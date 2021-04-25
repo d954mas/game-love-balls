@@ -25,9 +25,10 @@ function EcsWorld:find_by_id(id)
 end
 
 function EcsWorld:add_systems()
-   -- self.ecs:addSystem(SYSTEMS.ActionsUpdateSystem())
-    --self.ecs:addSystem(SYSTEMS.InputSystem())
-    --self.ecs:addSystem(SYSTEMS.AutoDestroySystem())
+    self.ecs:addSystem(SYSTEMS.ActionsUpdateSystem())
+    self.ecs:addSystem(SYSTEMS.InputSystem())
+    self.ecs:addSystem(SYSTEMS.DrawLoveBallSystem())
+    self.ecs:addSystem(SYSTEMS.AutoDestroySystem())
 end
 
 function EcsWorld:update(dt)

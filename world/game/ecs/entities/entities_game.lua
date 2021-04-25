@@ -22,6 +22,9 @@ end)
 ---@field w number
 ---@field h number
 
+---@class LoveBall
+---@field type number [1-5]
+
 
 ---@class EntityGame
 ---@field _in_world boolean is entity in world
@@ -33,6 +36,9 @@ end)
 ---@field auto_destroy boolean
 ---@field actions Action[]
 ---@field visible boolean
+---@field love_ball LoveBall
+---@field love_ball_go LoveBallView
+
 
 
 ---@class ENTITIES
@@ -81,6 +87,20 @@ end
 ---@return EntityGame
 function Entities:create_input(action_id, action)
     return { input_info = { action_id = action_id, action = action }, auto_destroy = true }
+end
+
+---@return EntityGame
+function Entities:create_love_ball(pos)
+    assert(pos)
+    ---@type EntityGame
+    local e = {}
+    e.love_ball = {
+        type = math.random(1, 5)
+    }
+    e.love_ball_go = nil
+    e.visible = false
+    e.position = vmath.vector3(pos.x, pos.y, pos.z)
+    return e
 end
 
 return Entities

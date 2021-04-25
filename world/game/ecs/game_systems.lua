@@ -34,6 +34,7 @@ require = creator
 M.ActionsUpdateSystem = require "world.game.ecs.systems.actions_update_system"
 M.AutoDestroySystem = require "world.game.ecs.systems.auto_destroy_system"
 M.InputSystem = require "world.game.ecs.systems.input_system"
+M.DrawLoveBallSystem = require "world.game.ecs.systems.draw_love_ball_system"
 
 
 require = require_old

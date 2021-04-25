@@ -41,6 +41,22 @@ end
 
 function GameWorld:init()
     self.ecs_game:add_systems()
+    self:start_game()
+end
+
+function GameWorld:start_game()
+    self:love_balls_spawn(self.world.balance.config.love_balls_start_count)
+end
+
+function GameWorld:love_balls_spawn(count)
+    local spawn_poses = COMMON.LUME.clone(self.world.balance.love_ball_spawn_poses)
+    spawn_poses = COMMON.LUME.shuffle(spawn_poses)
+    for i = 1, count do
+        local spawn_pos = table.remove(spawn_poses)
+        local e = self.ecs_game.entities:create_love_ball(vmath.vector3(spawn_pos.x + COMMON.LUME.random(-10, 10),
+                spawn_pos.y + COMMON.LUME.random(-10, 10), spawn_pos.z))
+        self.ecs_game:add_entity(e)
+    end
 end
 
 function GameWorld:update(dt)

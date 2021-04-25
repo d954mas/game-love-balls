@@ -59,6 +59,14 @@ function GameWorld:love_balls_take()
         ball.selected = false
         ball.can_selected = false
     end
+    if(#self.love_balls_selected>=3)then
+        local balls_count = #self.love_balls_selected
+        for _, ball in ipairs(self.love_balls_selected)do
+            self.ecs_game:remove_entity(ball)
+        end
+        self:love_balls_spawn(balls_count)
+
+    end
     self.love_balls_selected = {}
 end
 
@@ -69,6 +77,12 @@ end
 
 function GameWorld:love_balls_spawn(count)
     local spawn_poses = COMMON.LUME.clone(self.world.balance.love_ball_spawn_poses)
+    --if not big ball count then spawn not too far
+    if(count<15)then
+        for i=#spawn_poses,20,-1 do
+            spawn_poses[i] = nil
+        end
+    end
     spawn_poses = COMMON.LUME.shuffle(spawn_poses)
     for i = 1, count do
         local spawn_pos = table.remove(spawn_poses)

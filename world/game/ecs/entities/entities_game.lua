@@ -65,8 +65,12 @@ function Entities:on_entity_removed(e)
     if (e.tag) then
         self.by_tag[e.tag] = nil
     end
-    if(e.love_ball)then
+    if (e.love_ball) then
         self.love_balls_map[e] = nil
+    end
+    if (e.love_ball_go) then
+        go.delete(e.love_ball_go.root, true)
+        e.love_ball_go = nil
     end
 end
 
@@ -78,11 +82,10 @@ function Entities:on_entity_added(e)
         assert(not self.by_tag[e.tag])
         self.by_tag[e.tag] = e
     end
-    if(e.love_ball)then
+    if (e.love_ball) then
         self.love_balls_map[e] = e
     end
 end
-
 
 ---@param e EntityGame
 function Entities:on_entity_updated(e)

@@ -11,6 +11,7 @@ System.name = "InputSystem"
 function System:init()
     local cam = CAMERAS.game_camera
     self.input_handler = COMMON.INPUT()
+    self.dist = 105
     self.input_handler:add(COMMON.HASHES.INPUT.TOUCH, function(_, _, action)
         local game = self.world.game_world.game
         local input = game.input
@@ -46,7 +47,7 @@ function System:init()
                         local dx = start_ball.position.x - ball.position.x
                         local dy = start_ball.position.y - ball.position.y
                         local dist = math.sqrt(dx * dx + dy * dy)
-                        if(dist<100)then
+                        if(dist<self.dist)then
                             ball.selected = true
                             table.insert(game.love_balls_selected, ball)
                             start_ball = ball
@@ -64,7 +65,7 @@ function System:init()
 
 
                 start_ball = game.love_balls_selected[#game.love_balls_selected]
-                selected_balls = self:balls_found(start_ball.position.x, start_ball.position.y, 100)
+                selected_balls = self:balls_found(start_ball.position.x, start_ball.position.y, self.dist)
                 for _, ball in ipairs(selected_balls) do
                     if (ball.love_ball.type == start_ball.love_ball.type) then
                         ball.can_selected = true

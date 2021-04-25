@@ -36,6 +36,7 @@ end)
 ---@field auto_destroy boolean
 ---@field actions Action[]
 ---@field visible boolean
+---@field selected boolean
 ---@field love_ball LoveBall
 ---@field love_ball_go LoveBallView
 

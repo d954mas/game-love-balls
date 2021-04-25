@@ -1,0 +1,27 @@
+script: "/scenes/game/game_world.gui_script"
+fonts {
+  name: "game_score"
+  font: "/assets/fonts/game_score.font"
+}
+textures {
+  name: "gui"
+  texture: "/assets/images/gui/gui.atlas"
+}
+background_color {
+  x: 0.0
+  y: 0.0
+  z: 0.0
+  w: 0.0
+}
+layers {
+  name: "below"
+}
+layers {
+  name: "layer"
+}
+layers {
+  name: "top"
+}
+material: "/assets/materials/gui_game.material"
+adjust_reference: ADJUST_REFERENCE_DISABLED
+max_nodes: 1024

@@ -1,0 +1,28 @@
+local COMMON = require "libs.common"
+local WORLD = require "world.world"
+
+local BaseGuiScript = require "libs_project.scripts.base_gui_script"
+
+---@class GameSceneGuiScript:ScriptMain
+local Script = COMMON.class("GameSceneGuiScript",BaseGuiScript)
+
+function Script:init()
+   BaseGuiScript.init(self,{context_name = COMMON.CONTEXT.NAMES.GAME_GUI})
+end
+
+function Script:bind_vh()
+   self.vh = {
+   }
+   self.views = {
+   }
+end
+
+function Script:init_gui()
+   BaseGuiScript.init_gui(self)
+end
+
+function Script:on_input(action_id,action)
+end
+
+
+COMMON.N28S.register(Script())

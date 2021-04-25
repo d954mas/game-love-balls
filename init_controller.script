@@ -1,0 +1,128 @@
+local Features = require "libs.features"
+
+local COMMON = require "libs.common"
+-- luacheck: ignore ANALYTICS
+local ANALYTICS = require "libs_project.analytics"
+
+local SM = require "libs_project.sm"
+local DEBUG_INFO = require "debug.debug_info"
+local SCENE_LOADER = require "libs.sm.scene_loader"
+
+local ANALYTICS_HELPER = require "libs_project.analytics_helper"
+
+local RUN_TEST = false or COMMON.CONSTANTS.IS_TESTS
+local CAMERAS = require "libs_project.cameras"
+
+local SOUNDS = require "libs.sounds"
+
+local WORLD = require "world.world"
+
+local TAG = "INIT_CONTROLLER"
+
+COMMON.empty_ne("defos")
+
+---@class ScriptMain
+local Script = COMMON.new_n28s()
+
+function Script:scenes_register()
+    SM:register_scenes()
+end
+
+function Script:input_init()
+    self.input = COMMON.INPUT()
+    self.input.acquire()
+end
+
+function Script:init_random()
+    math.randomseed(os.time())
+    math.random()
+    math.random()
+    math.random()
+    math.random()
+end
+
+function Script:init_msg()
+    self.msg = COMMON.MSG()
+    self.msg:add(COMMON.HASHES.MSG.LOADING.PROXY_LOADED, function(_, _, _, sender)
+        SCENE_LOADER.load_done(sender)
+    end)
+end
+
+function Script:init()
+    COMMON.i("version:" .. COMMON.CONSTANTS.PROJECT_VERSION,TAG)
+    COMMON.FEATURES = Features()
+    if(COMMON.CONSTANTS.VERSION_IS_RELEASE)then
+        COMMON.FEATURES:prod_config()
+    else
+        COMMON.FEATURES:debug_config()
+    end
+
+    WORLD.ads:init()
+
+    COMMON.FEATURES:load()
+    self.thread = COMMON.ThreadManager()
+    self.thread.drop_empty = false
+    self.subscription = COMMON.RX.SubscriptionsStorage()
+    COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.MAIN, self)
+
+    self:scenes_register()
+    self:init_random()
+    self:input_init()
+    self:init_msg()
+
+    SOUNDS:on_storage_changed()
+    SOUNDS:play_music(SOUNDS.music.main)
+    collectgarbage()
+    collectgarbage()
+
+    COMMON.GLOBAL.time_init_end = os.clock()
+    local init_time =  (COMMON.GLOBAL.time_init_end - COMMON.GLOBAL.time_init_start)
+    ANALYTICS_HELPER.performance_init_time(init_time)
+    COMMON.i("init time:" .. init_time)
+
+
+    if not RUN_TEST then
+        SM:show(SM.SCENES.GAME)
+    else
+        self.test_runner = require("tests.tests") -- run tests
+        self.test_runner.run()
+    end
+end
+
+function Script:update(dt)
+    --init input always on top
+    COMMON.INPUT.acquire()
+    ANALYTICS_HELPER.performance_dt(dt)
+    dt = dt * COMMON.GLOBAL.speed_game
+    COMMON.RX.MainScheduler:update(dt)
+    COMMON.APPLICATION.THREAD:update(dt)
+    SM:update(dt)
+    CAMERAS:update(dt)
+    SOUNDS:update(dt)
+    self.thread:update(dt)
+
+    if self.test_runner then
+        self.test_runner.update(dt)
+    end
+    DEBUG_INFO.update(dt)
+    WORLD:update(dt)
+
+   if(self.stars_view) then self.stars_view:update(dt) end
+end
+
+function Script:final()
+    COMMON.INPUT.clear()
+    self.input.release()
+    COMMON.CONTEXT:unregister(COMMON.CONTEXT.NAMES.MAIN)
+end
+
+function Script:on_input(action_id, action)
+    COMMON.INPUT.handle_pressed_keys(action_id, action)
+    return self.input:on_input(self, action_id, action)
+end
+
+function Script:on_message(message_id, message, sender)
+    self.msg:on_message(self, message_id, message, sender)
+end
+
+COMMON.N28S.register(Script())

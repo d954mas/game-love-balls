@@ -1,0 +1,26 @@
+local COMMON = require "libs.common"
+local WORLD = require "world.world"
+
+local Script = COMMON.new_n28s()
+
+function Script:init()
+    COMMON.input_acquire()
+    COMMON.CONTEXT:register(COMMON.CONTEXT.NAMES.GAME, self)
+    WORLD.game:init()
+end
+
+function Script:update(dt)
+    WORLD.game:update(dt)
+end
+
+function Script:final()
+    COMMON.input_release()
+    COMMON.CONTEXT:unregister(COMMON.CONTEXT.NAMES.GAME)
+    WORLD.game:final()
+end
+
+function Script:on_input(action_id, action)
+    return WORLD.game:on_input(action_id,action)
+end
+
+COMMON.N28S.register(Script())

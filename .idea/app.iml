@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/assets/localization" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/.internal" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/cjson" />
+      <excludeFolder url="file://$MODULE_DIR$/defos" />
+      <excludeFolder url="file://$MODULE_DIR$/go" />
+      <excludeFolder url="file://$MODULE_DIR$/lua_utf8" />
+      <excludeFolder url="file://$MODULE_DIR$/native" />
+      <excludeFolder url="file://$MODULE_DIR$/platform" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="defold_api" level="project" />
+  </component>
+</module>

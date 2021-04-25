@@ -1,0 +1,8 @@
+[project]
+dependencies = https://github.com/AGulev/jstodef/archive/1.3.0.zip,https://github.com/DanEngelbrecht/LuaScriptInstance/archive/master.zip,https://github.com/GameAnalytics/GA-SDK-DEFOLD/archive/3.3.10.zip,https://github.com/GameAnalytics/defold-openssl/archive/master.zip,https://github.com/GameDistribution/gd-defold/archive/main.zip,
+
+[game]
+target = game_distribution
+
+[gamedistribution]
+game_id = 5d375078b47a432bacfdaae8b65877b9

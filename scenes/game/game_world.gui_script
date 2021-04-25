@@ -1,0 +1,27 @@
+local COMMON = require "libs.common"
+local ACTIONS = require "libs.actions.actions"
+local COLOR_UTILS = require "richtext.color"
+local CAMERAS = require "libs_project.cameras"
+
+local BaseGuiScript = require "libs_project.scripts.base_gui_script"
+
+
+---@class GameWorldGuiScript:GuiScriptBase
+local Script = COMMON.class("GameWorldGuiScript", BaseGuiScript)
+
+
+function Script:bind_vh()
+    self.vh = {
+     
+    }
+    self.views = {
+    }
+end
+
+function Script:init_gui()
+    BaseGuiScript.init_gui(self)
+end
+
+
+
+COMMON.N28S.register(Script())

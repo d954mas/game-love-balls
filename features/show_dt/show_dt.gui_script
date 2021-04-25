@@ -1,0 +1,61 @@
+local COMMON = require "libs.common"
+local COLORS_LIB = require "richtext.color"
+local STRING_FORMAT = string.format
+
+local COLORS = {
+    GOOD = COLORS_LIB.parse_hex("#00ff00"),
+    WARNING = COLORS_LIB.parse_hex("#ffff00"),
+    BAD = COLORS_LIB.parse_hex("#ff0000")
+}
+
+local Script = COMMON.new_n28s()
+
+function Script:init()
+    gui.set_render_order(COMMON.CONSTANTS.GUI_ORDER.DEBUG)
+    self.vh = {
+        lbl_dt = gui.get_node("lbl_dt"),
+        lbl_dt_max = gui.get_node("lbl_dt_max")
+    }
+    self.current = {
+        min = 17,
+        max = 17,
+        sum = 0,
+        count = 0
+    }
+    self.delay = 1
+    self.time = 0
+end
+
+function Script:update(dt)
+    dt = dt
+    self.time = self.time + dt
+    self.current.min = math.min(self.current.min, dt)
+    self.current.max = math.max(self.current.max, dt)
+    self.current.count = self.current.count + 1
+    self.current.sum = self.current.sum + dt
+
+    if (self.time > self.delay) then
+        local avg = self.current.sum / self.current.count
+        local color = COLORS.GOOD
+        if (avg > 0.03) then color = COLORS.BAD
+        elseif (avg > 0.020) then color = COLORS.WARNING end
+        gui.set_color(self.vh.lbl_dt, color)
+        gui.set_text(self.vh.lbl_dt, STRING_FORMAT("%0.2f", avg * 1000))
+
+        if (self.current.max > 0.03) then color = COLORS.BAD
+        elseif (self.current.max > 0.020) then color = COLORS.WARNING end
+        gui.set_color(self.vh.lbl_dt_max, color)
+        gui.set_text(self.vh.lbl_dt_max, STRING_FORMAT("%0.2f", self.current.max * 1000))
+
+        self.time = 0
+        self.current.min = dt
+        self.current.max = dt
+        self.current.sum = 0
+        self.current.count = 0
+
+    end
+
+
+end
+
+COMMON.N28S.register(Script())

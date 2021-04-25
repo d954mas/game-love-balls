@@ -1,0 +1,8 @@
+[project]
+title = love balls dev
+
+[android]
+package = com.d954mas.game.loveballs.dev
+
+[game]
+version = dev

@@ -26,7 +26,8 @@ end
 
 function EcsWorld:add_systems()
     self.ecs:addSystem(SYSTEMS.ActionsUpdateSystem())
-    self.ecs:addSystem(SYSTEMS.InputSystem())
+  --  self.ecs:addSystem(SYSTEMS.InputSystem())
+    self.ecs:addSystem(SYSTEMS.InputSelectBallSystem())
     self.ecs:addSystem(SYSTEMS.DrawLoveBallSystem())
     self.ecs:addSystem(SYSTEMS.AutoDestroySystem())
 end

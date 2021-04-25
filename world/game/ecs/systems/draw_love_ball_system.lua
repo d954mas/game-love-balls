@@ -45,6 +45,7 @@ end
 
 ---@param e EntityGame
 function System:process(e, dt)
+    local game = self.world.game_world.game
     if (not e.love_ball_go) then
         local collection = collectionfactory.create(FACTORY,
                 vmath.vector3(e.position.x, e.position.y, 0.1),
@@ -69,7 +70,9 @@ function System:process(e, dt)
                 sprite = nil
             },
             config = {
-                selected = false
+                selected = false,
+                can_selected = false,
+                alpha = 1
             }
         }
         love_ball_go.portrait.sprite = msg.url(love_ball_go.portrait.root.socket,
@@ -87,12 +90,33 @@ function System:process(e, dt)
     end
 
     if (e.love_ball_go) then
+        e.position = go.get_position(e.love_ball_go.root)
+        local selected_balls = self.world.game_world.game.love_balls_selected
+        local alpha = 1
+        if(#selected_balls>0)then
+            alpha = 0.5
+        end
         if(e.selected ~= e.love_ball_go.config.selected)then
-            e.love_ball_go.config.selected = e.selected 
+            e.love_ball_go.config.selected = e.selected
             go.set(e.love_ball_go.selected.sprite,COMMON.HASHES.hash("tint.w"),
                 e.selected  and 1 or 0)
+            e.position.z = e.selected and 0.25 or 0.1
+            go.set_position(e.position,e.love_ball_go.root)
         end
-        e.position = go.get_position(e.love_ball_go.root)
+        if(e.can_selected ~= e.love_ball_go.config.can_selected)then
+            e.love_ball_go.config.can_selected = e.can_selected
+        end
+
+
+        if(e.can_selected)then alpha = 0.8 end
+        if(e.selected)then alpha = 1 end
+
+        if(e.love_ball_go.config.alpha ~= alpha)then
+            e.love_ball_go.config.alpha = alpha
+            go.set(e.love_ball_go.portrait.sprite,COMMON.HASHES.hash("tint.w"),
+                    alpha)
+        end
+
     end
 end
 

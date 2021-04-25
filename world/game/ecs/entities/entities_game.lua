@@ -50,6 +50,7 @@ function Entities:initialize(world)
     self.world = world
     ---@type EntityGame[]
     self.by_tag = {}
+    self.love_balls_map = {}
 end
 
 function Entities:find_by_tag(tag)
@@ -64,7 +65,9 @@ function Entities:on_entity_removed(e)
     if (e.tag) then
         self.by_tag[e.tag] = nil
     end
-
+    if(e.love_ball)then
+        self.love_balls_map[e] = nil
+    end
 end
 
 ---@param e EntityGame
@@ -75,7 +78,11 @@ function Entities:on_entity_added(e)
         assert(not self.by_tag[e.tag])
         self.by_tag[e.tag] = e
     end
+    if(e.love_ball)then
+        self.love_balls_map[e] = e
+    end
 end
+
 
 ---@param e EntityGame
 function Entities:on_entity_updated(e)

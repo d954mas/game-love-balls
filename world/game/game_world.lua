@@ -46,6 +46,25 @@ end
 
 function GameWorld:start_game()
     self:love_balls_spawn(self.world.balance.config.love_balls_start_count)
+    ---@type EntityGame[]
+    self.love_balls_selected = {}
+end
+
+function GameWorld:love_balls_take()
+    for _, ball in pairs(self.ecs_game.entities.love_balls_map) do
+        ball.selected = false
+        ball.can_selected = false
+    end
+    for _, ball in ipairs(self.love_balls_selected) do
+        ball.selected = false
+        ball.can_selected = false
+    end
+    self.love_balls_selected = {}
+end
+
+function GameWorld:restart_game()
+    self.ecs_game:clear()
+    self:start_game()
 end
 
 function GameWorld:love_balls_spawn(count)

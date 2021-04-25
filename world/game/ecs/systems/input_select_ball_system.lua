@@ -34,8 +34,7 @@ function System:init()
             if (#game.love_balls_selected > 0) then
                 local start_ball = game.love_balls_selected[#game.love_balls_selected]
 
-                --reset
-                for _, ball in ipairs(game.love_balls_selected) do
+                for _, ball in pairs(self.world.game_world.game.ecs_game.entities.love_balls_map) do
                     ball.can_selected = false
                 end
 
@@ -64,6 +63,7 @@ function System:init()
                 end
 
 
+                start_ball = game.love_balls_selected[#game.love_balls_selected]
                 selected_balls = self:balls_found(start_ball.position.x, start_ball.position.y, 100)
                 for _, ball in ipairs(selected_balls) do
                     if (ball.love_ball.type == start_ball.love_ball.type) then

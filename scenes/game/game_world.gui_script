@@ -12,7 +12,7 @@ local Script = COMMON.class("GameWorldGuiScript", BaseGuiScript)
 
 function Script:bind_vh()
     self.vh = {
-     
+
     }
     self.views = {
     }

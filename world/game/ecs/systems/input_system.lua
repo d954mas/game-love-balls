@@ -42,7 +42,7 @@ function System:init()
         else
             game.input.touch_pos_dx = 0
             game.input.touch_pos_dy = 0
-        end    
+        end
 
         if (game.input.type == ENUMS.GAME_INPUT.TOUCHED) then
             --move camera

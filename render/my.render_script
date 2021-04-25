@@ -92,9 +92,9 @@ function Render:register_messages()
         self.screen_size.w = render.get_window_width()
         self.screen_size.h = render.get_window_height()
         if (prev_w ~= self.screen_size.w or prev_h ~= self.screen_size.h) then
-            self:window_size_changed()
             COMMON.i("screen size changed. from " .. "w:" .. prev_w .. " h:" .. prev_h
                     .. " to w:" .. self.screen_size.w .. " h:" .. self.screen_size.h, TAG)
+            self:window_size_changed()
             COMMON.EVENT_BUS:event(COMMON.EVENTS.WINDOW_RESIZED, { width = self.screen_size.w, height = self.screen_size.h,
                                                                    prev_width = prev_w, prev_height = prev_h })
         end
@@ -155,7 +155,7 @@ end
 
 function Render:render_sprites()
     render.set_viewport(CAMERAS.current.viewport.x, CAMERAS.current.viewport.y,
-    CAMERAS.current.viewport.width, CAMERAS.current.viewport.height)
+            CAMERAS.current.viewport.width, CAMERAS.current.viewport.height)
     render.set_view(CAMERAS.current:get_view())
     render.set_projection(CAMERAS.current:get_proj())
 
@@ -183,9 +183,9 @@ end
 
 function Render:update(dt)
     self:render_clear()
-  --  self:render_bg_game()
+    --  self:render_bg_game()
     self:render_sprites()
-  --  self:render_gui_game()
+    --  self:render_gui_game()
     self:render_gui()
 end
 

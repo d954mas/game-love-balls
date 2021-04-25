@@ -6,7 +6,7 @@ function Balance:initialize(world)
     checks("?", "class:World")
     self.world = world
     self.config = {
-        
+
     }
 end
 

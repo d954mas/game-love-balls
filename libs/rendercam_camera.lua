@@ -357,7 +357,6 @@ function Camera:get_target_worldViewSize(lastX, lastY, lastWinX, lastWinY, winX,
         elseif self.scale_mode == Camera.SCALEMODE.FIXEDWIDTH then
             local ratio = winX / winY
             x, y = lastX, lastX / ratio
-            print(string.format("was:%s %s new:%s %s",lastX,lastY,x,y))
         elseif self.scale_mode == Camera.SCALEMODE.FIXEDHEIGHT then
             local ratio = winX / winY
             x, y = lastY * ratio, lastY

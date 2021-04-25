@@ -25,13 +25,9 @@ vsync = 0
 
 [physics]
 type = 2D
-debug = 0
-max_collisions = 0
-max_contacts = 0
-world_count = 0
-ray_cast_limit_2d = 0
-ray_cast_limit_3d = 0
-trigger_overlap_capacity = 0
+debug = 1
+scale = 0.01
+gravity_y = -300.0
 
 [script]
 shared_state = 1
@@ -50,8 +46,8 @@ package = com.d954mas.game.loveballs.dev
 
 [graphics]
 texture_profiles = /render/my.texture_profiles
-default_texture_min_filter = nearest
-default_texture_mag_filter = nearest
+default_texture_min_filter = linear
+default_texture_mag_filter = linear
 verify_graphics_calls = 0
 
 [sound]

@@ -48,7 +48,6 @@ function System:process(e, dt)
 
         e.love_ball_explosion_go = love_ball_explosion_go
         particlefx.play(love_ball_explosion_go.fx.particlefx)
-        e.auto_destroy_delay = 3
     end
 end
 

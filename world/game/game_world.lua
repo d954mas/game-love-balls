@@ -65,7 +65,8 @@ function GameWorld:love_balls_take()
             self.ecs_game:remove_entity(ball)
             self.ecs_game:add_entity({
                 position = vmath.vector3(ball.position),
-                love_ball_explosion = true
+                love_ball_explosion = true,
+                auto_destroy_delay = 2.5
             })
         end
         self:love_balls_spawn(balls_count)

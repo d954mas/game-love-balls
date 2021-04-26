@@ -63,6 +63,10 @@ function GameWorld:love_balls_take()
         local balls_count = #self.love_balls_selected
         for _, ball in ipairs(self.love_balls_selected)do
             self.ecs_game:remove_entity(ball)
+            self.ecs_game:add_entity({
+                position = vmath.vector3(ball.position),
+                love_ball_explosion = true
+            })
         end
         self:love_balls_spawn(balls_count)
 

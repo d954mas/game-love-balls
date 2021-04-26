@@ -94,7 +94,7 @@ max_count = 8
 
 [particle_fx]
 max_particle_count = 1024
-max_count = 0
+max_count = 128
 
 [gui]
 max_count = 16

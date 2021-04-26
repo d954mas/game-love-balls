@@ -39,6 +39,8 @@ end)
 ---@field selected boolean
 ---@field love_ball LoveBall
 ---@field love_ball_go LoveBallView
+---@field love_ball_explosion LoveBallView
+---@field love_ball_explosion_go LoveBallExplosionView
 
 
 
@@ -71,6 +73,10 @@ function Entities:on_entity_removed(e)
     if (e.love_ball_go) then
         go.delete(e.love_ball_go.root, true)
         e.love_ball_go = nil
+    end
+    if (e.love_ball_explosion_go) then
+        go.delete(e.love_ball_explosion_go.root, true)
+        e.love_ball_explosion_go = nil
     end
 end
 

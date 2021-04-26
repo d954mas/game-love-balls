@@ -36,6 +36,7 @@ M.AutoDestroySystem = require "world.game.ecs.systems.auto_destroy_system"
 M.InputSystem = require "world.game.ecs.systems.input_system"
 M.InputSelectBallSystem = require "world.game.ecs.systems.input_select_ball_system"
 M.DrawLoveBallSystem = require "world.game.ecs.systems.draw_love_ball_system"
+M.DrawLoveBallExplosionSystem = require "world.game.ecs.systems.draw_love_ball_explostion_system"
 
 
 require = require_old

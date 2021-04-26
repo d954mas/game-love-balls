@@ -11,7 +11,7 @@ local TAG = "Storage"
 ---@class Storage
 local Storage = COMMON.class("Storage")
 
-Storage.FILE_PATH = "d954mas_idle_mirror"
+Storage.FILE_PATH = "d954mas_love"
 Storage.VERSION = 17
 Storage.AUTOSAVE = 30 --seconds
 Storage.CLEAR = CONSTANTS.VERSION_IS_DEV and false --BE CAREFUL. Do not use in prod

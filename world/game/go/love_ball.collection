@@ -2,6 +2,7 @@ name: "default"
 scale_along_z: 0
 embedded_instances {
   id: "root"
+  children: "heart_line"
   children: "portrait"
   children: "selected"
   data: "embedded_components {\n"
@@ -114,13 +115,93 @@ embedded_instances {
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"tile_set: \\\"/assets/images/game/game.atlas\\\"\\n"
-  "default_animation: \\\"selected\\\"\\n"
+  "default_animation: \\\"heart_pink\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "blend_mode: BLEND_MODE_ALPHA\\n"
   "\"\n"
   "  position {\n"
   "    x: 0.0\n"
   "    y: 0.0\n"
+  "    z: 0.04\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"sprite_additive\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"tile_set: \\\"/assets/images/game/game.atlas\\\"\\n"
+  "default_animation: \\\"heart_pink_additive\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "blend_mode: BLEND_MODE_ADD\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.03\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.02
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 0.15
+    y: 0.15
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "heart_line"
+  data: "embedded_components {\n"
+  "  id: \"sprite\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"tile_set: \\\"/assets/images/game/game.atlas\\\"\\n"
+  "default_animation: \\\"heart_line\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "blend_mode: BLEND_MODE_ALPHA\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 15.0\n"
+  "    z: 0.02\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"sprite_additive\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"tile_set: \\\"/assets/images/game/game.atlas\\\"\\n"
+  "default_animation: \\\"heart_line_additive\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "blend_mode: BLEND_MODE_ADD\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 15.0\n"
   "    z: 0.01\n"
   "  }\n"
   "  rotation {\n"
@@ -134,7 +215,7 @@ embedded_instances {
   position {
     x: 0.0
     y: 0.0
-    z: -0.01
+    z: 0.01
   }
   rotation {
     x: 0.0
@@ -143,8 +224,8 @@ embedded_instances {
     w: 1.0
   }
   scale3 {
-    x: 0.31
-    y: 0.31
+    x: 0.33
+    y: 0.001
     z: 1.0
   }
 }

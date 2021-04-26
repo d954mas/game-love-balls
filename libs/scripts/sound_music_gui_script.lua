@@ -11,6 +11,8 @@ function Script:bind_vh()
         btn_sound = GUI.ButtonScale("btn_sound"),
         btn_music = GUI.ButtonScale("btn_music"),
     }
+    self.view.btn_sound.vh.icon = gui.get_node("btn_sound/icon")
+    self.view.btn_music.vh.icon = gui.get_node("btn_music/icon")
 end
 
 function Script:init_gui()
@@ -23,10 +25,10 @@ function Script:init_gui()
 end
 
 function Script:on_storage_changed()
-    gui.play_flipbook(self.view.btn_sound.vh.root,
-            COMMON.HASHES.hash(WORLD.storage.options:sound_get() and "btn_sound_on" or "btn_sound_off"))
-    gui.play_flipbook(self.view.btn_music.vh.root,
-            COMMON.HASHES.hash(WORLD.storage.options:music_get() and "btn_music_on" or "btn_music_off"))
+    gui.play_flipbook(self.view.btn_sound.vh.icon,
+            COMMON.HASHES.hash(WORLD.storage.options:sound_get() and "icon_sound" or "icon_sound_off"))
+    gui.play_flipbook(self.view.btn_music.vh.icon,
+            COMMON.HASHES.hash(WORLD.storage.options:music_get() and "icon_music" or "icon_music_off"))
 end
 
 function Script:init()

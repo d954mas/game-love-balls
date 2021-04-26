@@ -1,6 +1,6 @@
 local COMMON = require "libs.common"
 local WORLD = require "world.world"
-
+local SoundMusicScript = require "libs.scripts.sound_music_gui_script"
 local BaseGuiScript = require "libs_project.scripts.base_gui_script"
 
 ---@class GameSceneGuiScript:ScriptMain
@@ -25,4 +25,4 @@ function Script:on_input(action_id,action)
 end
 
 
-COMMON.N28S.register(Script())
+COMMON.N28S.register_scripts({SoundMusicScript(),Script()})

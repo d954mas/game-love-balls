@@ -104,7 +104,7 @@ function System:process(e, dt)
 
         e.love_ball_go = love_ball_go
         -- apply a force of 1 Newton towards world-x at the center of the game object instance
-        msg.post(love_ball_go.collision.collision, COMMON.HASHES.hash("apply_force"), { force = vmath.vector3(math.random() * 1, math.random() * 1, 0), position = go.get_world_position() })
+        msg.post(love_ball_go.collision.collision, COMMON.HASHES.hash("apply_force"), { force = vmath.vector3(COMMON.LUME.random(-0.75,0.75), -COMMON.LUME.random(1.5,2.5), 0)*10000, position = go.get_world_position(love_ball_go.root) })
         sprite.play_flipbook(e.love_ball_go.portrait.sprite, COMMON.HASHES.hash("portrait_" .. e.love_ball.type))
         msg.post(love_ball_go.selected.root, COMMON.HASHES.MSG.DISABLE)
         msg.post(love_ball_go.heart_line.root, COMMON.HASHES.MSG.DISABLE)

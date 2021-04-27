@@ -76,8 +76,11 @@ function GameWorld:love_balls_take()
 end
 
 function GameWorld:restart_game()
+    local ctx = COMMON.CONTEXT:set_context_top_game()
     self.ecs_game:clear()
+    self.ecs_game:add_systems()
     self:start_game()
+    ctx:remove()
 end
 
 function GameWorld:love_balls_spawn(count)

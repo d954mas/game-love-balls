@@ -1,28 +1,33 @@
 local COMMON = require "libs.common"
 local WORLD = require "world.world"
+local GUI = require "libs_project.gui.gui"
 local SoundMusicScript = require "libs.scripts.sound_music_gui_script"
 local BaseGuiScript = require "libs_project.scripts.base_gui_script"
 
 ---@class GameSceneGuiScript:ScriptMain
-local Script = COMMON.class("GameSceneGuiScript",BaseGuiScript)
+local Script = COMMON.class("GameSceneGuiScript", BaseGuiScript)
 
 function Script:init()
-   BaseGuiScript.init(self,{context_name = COMMON.CONTEXT.NAMES.GAME_GUI})
+    BaseGuiScript.init(self, { context_name = COMMON.CONTEXT.NAMES.GAME_GUI })
 end
 
 function Script:bind_vh()
-   self.vh = {
-   }
-   self.views = {
-   }
+    self.vh = {
+    }
+    self.views = {
+        btn_restart = GUI.ButtonScale("btn_restart")
+    }
 end
 
 function Script:init_gui()
-   BaseGuiScript.init_gui(self)
+    BaseGuiScript.init_gui(self)
+    self.views.btn_restart:set_input_listener(function ()
+        WORLD.game:restart_game()
+    end)
 end
 
-function Script:on_input(action_id,action)
+function Script:on_input(action_id, action)
+    if (self.views.btn_restart:on_input(action_id, action)) then return true end
 end
 
-
-COMMON.N28S.register_scripts({SoundMusicScript(),Script()})
+COMMON.N28S.register_scripts({ SoundMusicScript(), Script() })

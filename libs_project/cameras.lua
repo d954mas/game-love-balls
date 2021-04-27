@@ -19,7 +19,7 @@ function Cameras:init()
         aspect_ratio = vmath.vector3(540, 960, 0),
         use_view_area = true,
         view_area = vmath.vector3(540, 960, 0),
-        scale_mode = Camera.SCALEMODE.FIXEDHEIGHT
+        scale_mode = Camera.SCALEMODE.FIXEDAREA
     })
     self.current = self.game_camera
     self:window_resized()
@@ -35,7 +35,9 @@ end
 
 function Cameras:window_resized()
     self.game_camera:recalculate_viewport()
-    self.game_camera:set_position(vmath.vector3(0, self.game_camera.view_area.y / 2, 0))
+    local dy = self.game_camera.view_area.y-960
+    pprint(960 / 2+dy/2)
+    self.game_camera:set_position(vmath.vector3(0, self.game_camera.view_area.y/2-dy/2, 0))
 
 end
 

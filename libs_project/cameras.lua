@@ -36,7 +36,6 @@ end
 function Cameras:window_resized()
     self.game_camera:recalculate_viewport()
     local dy = self.game_camera.view_area.y-960
-    pprint(960 / 2+dy/2)
     self.game_camera:set_position(vmath.vector3(0, self.game_camera.view_area.y/2-dy/2, 0))
 
 end

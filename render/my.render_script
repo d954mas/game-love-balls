@@ -185,7 +185,7 @@ function Render:update(dt)
     self:render_clear()
     --  self:render_bg_game()
     self:render_sprites()
-    --  self:render_gui_game()
+    self:render_gui_game()
     self:render_gui()
 end
 

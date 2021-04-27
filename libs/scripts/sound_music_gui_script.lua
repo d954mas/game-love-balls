@@ -1,6 +1,7 @@
 local COMMON = require "libs.common"
 local GUI = require "libs_project.gui.gui"
 local WORLD = require "world.world"
+local CAMERAS = require "libs_project.cameras"
 
 ---@class SoundMusicGuiScriptBase
 local Script = COMMON.new_n28s()
@@ -43,8 +44,12 @@ function Script:init()
 end
 
 function Script:on_input(action_id, action)
-    if (self.view.btn_music:on_input(action_id, action)) then return true end
-    if (self.view.btn_sound:on_input(action_id, action)) then return true end
+    local action_new = COMMON.LUME.clone_deep(action)
+    local world_coord = CAMERAS.game_camera:screen_to_world_2d(action.screen_x, action.screen_y)
+    action_new.x = world_coord.x *  COMMON.RENDER.config_size.w/CAMERAS.game_camera.screen_size.w
+    action_new.y = world_coord.y *  COMMON.RENDER.config_size.h/CAMERAS.game_camera.screen_size.h
+    if (self.view.btn_music:on_input(action_id, action_new)) then return true end
+    if (self.view.btn_sound:on_input(action_id, action_new)) then return true end
 end
 
 function Script:update(dt)

@@ -1,6 +1,7 @@
 local COMMON = require "libs.common"
 local WORLD = require "world.world"
 local GUI = require "libs_project.gui.gui"
+local CAMERAS = require "libs_project.cameras"
 local SoundMusicScript = require "libs.scripts.sound_music_gui_script"
 local BaseGuiScript = require "libs_project.scripts.base_gui_script"
 
@@ -15,19 +16,29 @@ function Script:bind_vh()
     self.vh = {
     }
     self.views = {
-        btn_restart = GUI.ButtonScale("btn_restart")
+        btn_restart = GUI.ButtonScale("btn_restart"),
+        btn_up = GUI.ButtonScale("btn_up")
     }
 end
 
 function Script:init_gui()
     BaseGuiScript.init_gui(self)
-    self.views.btn_restart:set_input_listener(function ()
+    self.views.btn_restart:set_input_listener(function()
         WORLD.game:restart_game()
+    end)
+    self.views.btn_up:set_input_listener(function()
+        WORLD.game:love_balls_up()
     end)
 end
 
 function Script:on_input(action_id, action)
-    if (self.views.btn_restart:on_input(action_id, action)) then return true end
+    local action_new = COMMON.LUME.clone_deep(action)
+    local world_coord = CAMERAS.game_camera:screen_to_world_2d(action.screen_x, action.screen_y)
+    action_new.x = world_coord.x *  COMMON.RENDER.config_size.w/CAMERAS.game_camera.screen_size.w
+    action_new.y = world_coord.y *  COMMON.RENDER.config_size.h/CAMERAS.game_camera.screen_size.h
+
+    if (self.views.btn_restart:on_input(action_id, action_new)) then return true end
+    if (self.views.btn_up:on_input(action_id, action_new)) then return true end
 end
 
 COMMON.N28S.register_scripts({ SoundMusicScript(), Script() })

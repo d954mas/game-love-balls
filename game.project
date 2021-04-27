@@ -19,9 +19,8 @@ width = 540
 height = 960
 high_dpi = 1
 fullscreen = 0
-update_frequency = 0
 display_profiles = /builtins/render/default.display_profilesc
-vsync = 0
+vsync = 1
 
 [physics]
 type = 2D

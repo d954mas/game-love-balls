@@ -59,9 +59,9 @@ function GameWorld:love_balls_take()
         ball.selected = false
         ball.can_selected = false
     end
-    if(#self.love_balls_selected>=3)then
+    if (#self.love_balls_selected >= 3) then
         local balls_count = #self.love_balls_selected
-        for _, ball in ipairs(self.love_balls_selected)do
+        for _, ball in ipairs(self.love_balls_selected) do
             self.ecs_game:remove_entity(ball)
             self.ecs_game:add_entity({
                 position = vmath.vector3(ball.position),
@@ -83,11 +83,42 @@ function GameWorld:restart_game()
     ctx:remove()
 end
 
+function GameWorld:love_balls_up()
+    for _, ball in pairs(self.ecs_game.entities.love_balls_map) do
+        ball.selected = false
+        ball.can_selected = false
+    end
+    for _, ball in ipairs(self.love_balls_selected) do
+        ball.selected = false
+        ball.can_selected = false
+    end
+    self.love_balls_selected = {}
+
+    local ctx = COMMON.CONTEXT:set_context_top_game()
+    for _, ball in pairs(self.ecs_game.entities.love_balls_map) do
+        if (ball.love_ball_go) then
+            local scale_y = 1
+            if(ball.position.y>1100)then
+                scale_y = 0.25
+            elseif(ball.position.y > 800)then
+                scale_y = 0.5
+            elseif(ball.position.y > 500)then
+                scale_y = 0.75
+            end
+            msg.post(ball.love_ball_go.collision.collision, COMMON.HASHES.hash("apply_force"),
+                    { force = vmath.vector3(COMMON.LUME.random(-1.75, 1.75),
+                            COMMON.LUME.random(2.5, 3.5)*scale_y, 0) * 7000,
+                      position = go.get_world_position(ball.love_ball_go.root) })
+            end
+    end
+    ctx:remove()
+end
+
 function GameWorld:love_balls_spawn(count)
     local spawn_poses = COMMON.LUME.clone(self.world.balance.love_ball_spawn_poses)
     --if not big ball count then spawn not too far
-    if(count<15)then
-        for i=#spawn_poses,20,-1 do
+    if (count < 15) then
+        for i = #spawn_poses, 20, -1 do
             spawn_poses[i] = nil
         end
     end

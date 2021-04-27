@@ -35,19 +35,33 @@ function GameWorld:initialize(world)
             movable = false
         }
     }
+    self.state = {
+        state = ENUMS.GAME_STATE.TAP_TO_PLAY,
+        timer = self.world.balance.config.timer,
+        score = 0
+    }
     self.input.drag = nil
     self:on_resize()
 end
 
 function GameWorld:init()
     self.ecs_game:add_systems()
-    self:start_game()
+    timer.delay(0,false,function ()
+        self:start_game()
+    end)
 end
 
 function GameWorld:start_game()
+    self.state.state = ENUMS.GAME_STATE.GAME
+    self.state.score = 0
+    self.state.timer = self.world.balance.config.timer
     self:love_balls_spawn(self.world.balance.config.love_balls_start_count)
     ---@type EntityGame[]
     self.love_balls_selected = {}
+
+    local ctx = COMMON.CONTEXT:set_context_top_game_gui()
+    ctx.data:game_start()
+    ctx:remove()
 end
 
 function GameWorld:love_balls_take()
@@ -71,8 +85,18 @@ function GameWorld:love_balls_take()
         end
         self:love_balls_spawn(balls_count)
 
+        --add score
+        local score = self.world.balance:score_count(balls_count)
+        self.state.score = self.state.score + score
+        local last_ball = self.love_balls_selected[#self.love_balls_selected]
+        local ctx = COMMON.CONTEXT:set_context_top_game_gui()
+        ctx.data.views.lbl_score:set_value(self.state.score, false)
+        ctx.data:score_change_animate({ position = last_ball.position, score = score })
+        ctx:remove()
     end
     self.love_balls_selected = {}
+
+
 end
 
 function GameWorld:restart_game()
@@ -98,18 +122,18 @@ function GameWorld:love_balls_up()
     for _, ball in pairs(self.ecs_game.entities.love_balls_map) do
         if (ball.love_ball_go) then
             local scale_y = 1
-            if(ball.position.y>1100)then
+            if (ball.position.y > 1100) then
                 scale_y = 0.25
-            elseif(ball.position.y > 800)then
+            elseif (ball.position.y > 800) then
                 scale_y = 0.5
-            elseif(ball.position.y > 500)then
+            elseif (ball.position.y > 500) then
                 scale_y = 0.75
             end
             msg.post(ball.love_ball_go.collision.collision, COMMON.HASHES.hash("apply_force"),
                     { force = vmath.vector3(COMMON.LUME.random(-1.75, 1.75),
-                            COMMON.LUME.random(2.5, 3.5)*scale_y, 0) * 7000,
+                            COMMON.LUME.random(2.5, 3.5) * scale_y, 0) * 7000,
                       position = go.get_world_position(ball.love_ball_go.root) })
-            end
+        end
     end
     ctx:remove()
 end
@@ -134,6 +158,9 @@ end
 function GameWorld:update(dt)
     self.command_executor:act(dt)
     self.ecs_game:update(dt)
+    if (self.state.state == ENUMS.GAME_STATE.GAME) then
+        self.state.timer = self.state.timer - dt
+    end
 end
 
 function GameWorld:final()

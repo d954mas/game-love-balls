@@ -2,8 +2,61 @@ local COMMON = require "libs.common"
 local WORLD = require "world.world"
 local GUI = require "libs_project.gui.gui"
 local CAMERAS = require "libs_project.cameras"
+local ACTIONS = require "libs.actions.actions"
 local SoundMusicScript = require "libs.scripts.sound_music_gui_script"
 local BaseGuiScript = require "libs_project.scripts.base_gui_script"
+
+---@class ScoreChangeLbl
+local ScoreChangeLbl = COMMON.class("ScoreChangeLbl")
+
+function ScoreChangeLbl:initialize(nodes)
+    self.vh = {
+        root = assert(nodes["score_lbl/root"]),
+        lbl = assert(nodes["score_lbl/lbl"])
+    }
+    self.animation = ACTIONS.Sequence()
+    self.animation.drop_empty = false
+end
+
+function ScoreChangeLbl:score_set(score)
+    checks("?", "number")
+    gui.set_text(self.vh.lbl, score)
+--    gui.set_color(self.vh.lbl,score >= 0 and COLORS.SCORE_GOOD or COLORS.SCORE_BAD)
+end
+
+function ScoreChangeLbl:animate(position)
+    checks("?", "table|userdata")
+    assert(position.x and position.y, "bad position")
+    gui.set_position(self.vh.root, position)
+    local position_start = vmath.vector3(position.x, position.y, 0)
+    local position_end = vmath.vector3(position.x, position.y + 200, 0)
+    local text_color = gui.get_color(self.vh.lbl)
+    self.animation:add_action(function()
+        gui.set_enabled(self.vh.root, true)
+        gui.set_scale(self.vh.root, vmath.vector4(0.01))
+        gui.set_position(self.vh.root, position_start)
+
+    end)
+    local parallel = ACTIONS.Parallel()
+    parallel:add_action(ACTIONS.TweenGui { object = self.vh.root, property = "scale", v3 = true,
+                                           from = vmath.vector3(0.2), to = vmath.vector3(1), time = 0.2 })
+    parallel:add_action(ACTIONS.TweenGui { object = self.vh.root, property = "position", v3 = true,
+                                           from = position_start, delay = 0.25, to = position_end, time = 0.8 })
+    parallel:add_action(ACTIONS.TweenGui { object = self.vh.root, property = "color", v4 = true,
+                                           from = text_color, delay = 0.35, to = vmath.vector4(text_color.x,
+                text_color.y,text_color.z,0), time = 0.7 })
+    self.animation:add_action(parallel)
+    self.animation:add_action(function ()
+        gui.delete_node(self.vh.root)
+        self.remove = true
+    end)
+
+end
+
+function ScoreChangeLbl:update(dt)
+    self.animation:update(dt)
+end
+
 
 ---@class GameSceneGuiScript:ScriptMain
 local Script = COMMON.class("GameSceneGuiScript", BaseGuiScript)
@@ -15,19 +68,23 @@ end
 function Script:bind_vh()
     self.vh = {
         lbl_timer = gui.get_node("timer/text"),
-        lbl_score = gui.get_node("lbl_score")
+        score_lbl = assert(gui.get_node("score_lbl/root")),
     }
     self.views = {
+        lbl_score = GUI.TickLbl(assert(gui.get_node("lbl_score"))),
         btn_restart = GUI.ButtonScale("btn_restart"),
         btn_up = GUI.ButtonScale("btn_up"),
-        progress_love = GUI.ProgressBar("progress_love")
+        progress_love = GUI.ProgressBar("progress_love"),
+        score_labels = {}
     }
 end
 
 function Script:init_gui()
     BaseGuiScript.init_gui(self)
-    gui.set_text(self.vh.lbl_score,"")
-    gui.set_text(self.vh.lbl_timer,"")
+    gui.set_enabled(self.vh.score_lbl, false)
+    self.views.lbl_score.animation_config.time =0.5
+    self.views.lbl_score.animation_config.easing = "linear"
+    self.views.lbl_score:set_value(0, true)
     self.views.progress_love:set_value_max(100)
     self.views.progress_love:set_value(0, true)
     self.views.btn_restart:set_input_listener(function()
@@ -38,6 +95,35 @@ function Script:init_gui()
     end)
 end
 
+function Script:score_change_animate(config)
+    checks("?", {
+        position = "table|userdata",
+        score = "number"
+    })
+    assert(config.position.x and config.position.y, "bad position")
+    local view = ScoreChangeLbl(gui.clone_tree(self.vh.score_lbl))
+    view:score_set(config.score)
+    view:animate(config.position)
+    table.insert(self.views.score_labels, view)
+end
+
+function Script:game_start()
+    self.views.lbl_score:set_value(0, true)
+    gui.set_text(self.vh.lbl_timer,math.ceil(math.min(WORLD.balance.config.timer_gui_max,WORLD.game.state.timer)))
+end
+
+function Script:update(dt)
+    BaseGuiScript.update(self,dt)
+    self.views.lbl_score:update(dt)
+    gui.set_text(self.vh.lbl_timer,math.ceil(math.min(WORLD.balance.config.timer_gui_max,WORLD.game.state.timer)))
+    for i = #self.views.score_labels, 1, -1 do
+        local v = self.views.score_labels[i]
+        v:update(dt)
+        if (v.remove) then table.remove(self.views.score_labels, i) end
+    end
+end
+
+
 function Script:on_input(action_id, action)
     local action_new = COMMON.LUME.clone_deep(action)
     local world_coord = CAMERAS.game_camera:screen_to_world_2d(action.screen_x, action.screen_y)
@@ -47,5 +133,6 @@ function Script:on_input(action_id, action)
     if (self.views.btn_restart:on_input(action_id, action_new)) then return true end
     if (self.views.btn_up:on_input(action_id, action_new)) then return true end
 end
+
 
 COMMON.N28S.register_scripts({ SoundMusicScript(), Script() })

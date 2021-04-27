@@ -8,4 +8,10 @@ ENUMS.GAME_INPUT = {
     ZOOMING = "ZOOMING"
 }
 
+ENUMS.GAME_STATE = {
+    TAP_TO_PLAY = "TAP_TO_PLAY",
+    GAME = "GAME",
+    WIN = "WIN",
+}
+
 return ENUMS

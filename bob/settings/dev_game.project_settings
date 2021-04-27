@@ -4,5 +4,19 @@ title = love balls dev
 [android]
 package = com.d954mas.game.loveballs.dev
 
+[gameanalytics]
+game_key_ios = 9d9e8194df591d23f74368ed972a28b1
+secret_key_ios = 2ebce95889e380550ea570aa225dced937425ad7
+game_key_android = 9d9e8194df591d23f74368ed972a28b1
+secret_key_android = 2ebce95889e380550ea570aa225dced937425ad7
+game_key_html5 = 9d9e8194df591d23f74368ed972a28b1
+secret_key_html5 = 2ebce95889e380550ea570aa225dced937425ad7
+game_key_osx = 9d9e8194df591d23f74368ed972a28b1
+secret_key_osx = 2ebce95889e380550ea570aa225dced937425ad7
+game_key_windows = 9d9e8194df591d23f74368ed972a28b1
+secret_key_windows = 2ebce95889e380550ea570aa225dced937425ad7
+game_key_linux = 9d9e8194df591d23f74368ed972a28b1
+secret_key_linux = 2ebce95889e380550ea570aa225dced937425ad7
+
 [game]
 version = dev

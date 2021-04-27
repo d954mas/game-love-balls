@@ -14,15 +14,22 @@ end
 
 function Script:bind_vh()
     self.vh = {
+        lbl_timer = gui.get_node("timer/text"),
+        lbl_score = gui.get_node("lbl_score")
     }
     self.views = {
         btn_restart = GUI.ButtonScale("btn_restart"),
-        btn_up = GUI.ButtonScale("btn_up")
+        btn_up = GUI.ButtonScale("btn_up"),
+        progress_love = GUI.ProgressBar("progress_love")
     }
 end
 
 function Script:init_gui()
     BaseGuiScript.init_gui(self)
+    gui.set_text(self.vh.lbl_score,"")
+    gui.set_text(self.vh.lbl_timer,"")
+    self.views.progress_love:set_value_max(100)
+    self.views.progress_love:set_value(0, true)
     self.views.btn_restart:set_input_listener(function()
         WORLD.game:restart_game()
     end)
@@ -34,8 +41,8 @@ end
 function Script:on_input(action_id, action)
     local action_new = COMMON.LUME.clone_deep(action)
     local world_coord = CAMERAS.game_camera:screen_to_world_2d(action.screen_x, action.screen_y)
-    action_new.x = world_coord.x *  COMMON.RENDER.config_size.w/CAMERAS.game_camera.screen_size.w
-    action_new.y = world_coord.y *  COMMON.RENDER.config_size.h/CAMERAS.game_camera.screen_size.h
+    action_new.x = world_coord.x * COMMON.RENDER.config_size.w / CAMERAS.game_camera.screen_size.w
+    action_new.y = world_coord.y * COMMON.RENDER.config_size.h / CAMERAS.game_camera.screen_size.h
 
     if (self.views.btn_restart:on_input(action_id, action_new)) then return true end
     if (self.views.btn_up:on_input(action_id, action_new)) then return true end

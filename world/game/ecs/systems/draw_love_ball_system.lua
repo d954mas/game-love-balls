@@ -86,7 +86,8 @@ function System:process(e, dt)
             config = {
                 selected = false,
                 can_selected = false,
-                alpha = 1
+                alpha = 1,
+                visible = true
             }
         }
         love_ball_go.portrait.sprite = msg.url(love_ball_go.portrait.root.socket,
@@ -112,6 +113,7 @@ function System:process(e, dt)
 
     if (e.love_ball_go) then
         e.position = go.get_position(e.love_ball_go.root)
+        local visible = e.position.y < 745
         local selected_balls = self.world.game_world.game.love_balls_selected
         local alpha = 1
         if (#selected_balls > 0) then
@@ -154,6 +156,12 @@ function System:process(e, dt)
             e.love_ball_go.config.alpha = alpha
             go.set(e.love_ball_go.portrait.sprite, COMMON.HASHES.hash("tint.w"),
                     alpha)
+        end
+
+        if (e.love_ball_go.config.visible ~= visible) then
+            e.love_ball_go.config.visible = visible
+            local message = visible and COMMON.HASHES.MSG.ENABLE or COMMON.HASHES.MSG.DISABLE
+            msg.post(e.love_ball_go.portrait.sprite, message)
         end
 
     end

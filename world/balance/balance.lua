@@ -6,7 +6,7 @@ function Balance:initialize(world)
     checks("?", "class:World")
     self.world = world
     self.config = {
-        love_balls_start_count = 45
+        love_balls_start_count = 40
     }
     self.love_ball_spawn_poses = {}
 

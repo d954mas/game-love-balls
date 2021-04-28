@@ -98,7 +98,10 @@ function Script:init_gui()
         WORLD.game:love_balls_up()
     end)
     self.views.btn_play:set_input_listener(function()
-        WORLD.game:restart_game()
+        WORLD.ads:show_interstitial_ad("btn_play",function ()
+            WORLD.game:restart_game()
+        end)
+
     end)
     self:game_state_changed()
 end

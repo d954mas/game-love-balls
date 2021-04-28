@@ -12,9 +12,9 @@ function Features:initialize()
 end
 
 function Features:debug_config()
-    self.features_base.debug_gui = true
+--    self.features_base.debug_gui = true
     self.features_base.resizer = COMMON.CONSTANTS.PLATFORM_IS_PC
-    self.features_base.show_dt = true
+  --  self.features_base.show_dt = true
 
 end
 function Features:prod_config()

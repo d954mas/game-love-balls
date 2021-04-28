@@ -7,6 +7,10 @@ textures {
   name: "gui"
   texture: "/assets/images/gui/gui.atlas"
 }
+textures {
+  name: "bg"
+  texture: "/assets/images/game/bg.atlas"
+}
 background_color {
   x: 0.0
   y: 0.0

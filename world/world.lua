@@ -5,6 +5,7 @@ local CommandExecutor = require "world.commands.command_executor"
 local Balance = require "world.balance.balance"
 local Ads = require "libs.ads.ads"
 local Utils = require "world.utils.utils"
+local SOUNDS = require "libs.sounds"
 
 local TAG = "WORLD"
 ---@class World
@@ -20,6 +21,9 @@ function M:initialize()
     self.game = GameWorld(self)
     self.ads = Ads(self)
     self.utils = Utils(self)
+    self.sounds = SOUNDS
+    self.sounds.world = self
+    self.sounds:on_storage_changed()
 
     self.subscription:add(COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.WINDOW_RESIZED)
                                 :go_distinct(self.scheduler):subscribe(function()

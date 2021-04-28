@@ -74,6 +74,7 @@ function GameWorld:love_balls_take()
         ball.can_selected = false
     end
     if (#self.love_balls_selected >= 3) then
+        self.world.sounds:play_love_balls_take()
         local balls_count = #self.love_balls_selected
         for _, ball in ipairs(self.love_balls_selected) do
             self.ecs_game:remove_entity(ball)
@@ -95,12 +96,13 @@ function GameWorld:love_balls_take()
         ctx:remove()
     end
     self.love_balls_selected = {}
+
 end
 
 function GameWorld:love_balls_explode_all()
     for _, ball in pairs(self.ecs_game.entities.love_balls_map) do
         self.ecs_game:remove_entity(ball)
-        if(ball.love_ball_go and ball.love_ball_go.config.visible) then
+        if (ball.love_ball_go and ball.love_ball_go.config.visible) then
             self.ecs_game:add_entity({
                 position = vmath.vector3(ball.position),
                 love_ball_explosion = true,

@@ -49,9 +49,9 @@ function Script:init_msg()
 end
 
 function Script:init()
-    COMMON.i("version:" .. COMMON.CONSTANTS.PROJECT_VERSION,TAG)
+    COMMON.i("version:" .. COMMON.CONSTANTS.PROJECT_VERSION, TAG)
     COMMON.FEATURES = Features()
-    if(COMMON.CONSTANTS.VERSION_IS_RELEASE)then
+    if (COMMON.CONSTANTS.VERSION_IS_RELEASE) then
         COMMON.FEATURES:prod_config()
     else
         COMMON.FEATURES:debug_config()
@@ -76,10 +76,9 @@ function Script:init()
     collectgarbage()
 
     COMMON.GLOBAL.time_init_end = os.clock()
-    local init_time =  (COMMON.GLOBAL.time_init_end - COMMON.GLOBAL.time_init_start)
+    local init_time = (COMMON.GLOBAL.time_init_end - COMMON.GLOBAL.time_init_start)
     ANALYTICS_HELPER.performance_init_time(init_time)
     COMMON.i("init time:" .. init_time)
-
 
     if not RUN_TEST then
         SM:show(SM.SCENES.GAME)
@@ -87,6 +86,7 @@ function Script:init()
         self.test_runner = require("tests.tests") -- run tests
         self.test_runner.run()
     end
+    SOUNDS:play_music(SOUNDS.music.main)
 end
 
 function Script:update(dt)
@@ -107,7 +107,7 @@ function Script:update(dt)
     DEBUG_INFO.update(dt)
     WORLD:update(dt)
 
-   if(self.stars_view) then self.stars_view:update(dt) end
+    if (self.stars_view) then self.stars_view:update(dt) end
 end
 
 function Script:final()

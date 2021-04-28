@@ -95,8 +95,20 @@ function GameWorld:love_balls_take()
         ctx:remove()
     end
     self.love_balls_selected = {}
+end
 
+function GameWorld:love_balls_explode_all()
+    for _, ball in pairs(self.ecs_game.entities.love_balls_map) do
+        self.ecs_game:remove_entity(ball)
+        if(ball.love_ball_go and ball.love_ball_go.config.visible) then
+            self.ecs_game:add_entity({
+                position = vmath.vector3(ball.position),
+                love_ball_explosion = true,
+                auto_destroy_delay = 2.5
+            })
+        end
 
+    end
 end
 
 function GameWorld:restart_game()
@@ -163,7 +175,9 @@ function GameWorld:update(dt)
         if (self.state.timer <= 0) then
             self.state.timer = 0
             self.state.state = ENUMS.GAME_STATE.WIN
+            self.world.storage.game:highscore_change(self.state.score)
             self:love_balls_take()
+            self:love_balls_explode_all()
         end
     end
 end

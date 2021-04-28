@@ -22,7 +22,7 @@ end
 function ScoreChangeLbl:score_set(score)
     checks("?", "number")
     gui.set_text(self.vh.lbl, score)
---    gui.set_color(self.vh.lbl,score >= 0 and COLORS.SCORE_GOOD or COLORS.SCORE_BAD)
+    --    gui.set_color(self.vh.lbl,score >= 0 and COLORS.SCORE_GOOD or COLORS.SCORE_BAD)
 end
 
 function ScoreChangeLbl:animate(position)
@@ -45,9 +45,9 @@ function ScoreChangeLbl:animate(position)
                                            from = position_start, delay = 0.25, to = position_end, time = 0.8 })
     parallel:add_action(ACTIONS.TweenGui { object = self.vh.root, property = "color", v4 = true,
                                            from = text_color, delay = 0.35, to = vmath.vector4(text_color.x,
-                text_color.y,text_color.z,0), time = 0.7 })
+                text_color.y, text_color.z, 0), time = 0.7 })
     self.animation:add_action(parallel)
-    self.animation:add_action(function ()
+    self.animation:add_action(function()
         gui.delete_node(self.vh.root)
         self.remove = true
     end)
@@ -57,7 +57,6 @@ end
 function ScoreChangeLbl:update(dt)
     self.animation:update(dt)
 end
-
 
 ---@class GameSceneGuiScript:ScriptMain
 local Script = COMMON.class("GameSceneGuiScript", BaseGuiScript)
@@ -69,6 +68,7 @@ end
 function Script:bind_vh()
     self.vh = {
         lbl_timer = gui.get_node("timer/text"),
+        lbl_highscore = assert(gui.get_node("lbl_highscore")),
         score_lbl = assert(gui.get_node("score_lbl/root")),
     }
     self.views = {
@@ -82,11 +82,13 @@ function Script:bind_vh()
 end
 
 function Script:init_gui()
+    self.highscore = WORLD.storage.data.game.highscore
     BaseGuiScript.init_gui(self)
     gui.set_enabled(self.vh.score_lbl, false)
-    self.views.lbl_score.animation_config.time =0.5
+    self.views.lbl_score.animation_config.time = 0.5
     self.views.lbl_score.animation_config.easing = "linear"
     self.views.lbl_score:set_value(0, true)
+    gui.set_text(self.vh.lbl_highscore, COMMON.LOCALIZATION.highscore_lbl{ score = self.highscore })
     self.views.progress_love:set_value_max(100)
     self.views.progress_love:set_value(0, true)
     self.views.btn_restart:set_input_listener(function()
@@ -102,20 +104,37 @@ function Script:init_gui()
 end
 
 function Script:game_state_changed()
-    if(self.game_state ~= WORLD.game.state.state)then
+    if (self.game_state ~= WORLD.game.state.state) then
         self.game_state = WORLD.game.state.state
-        if(self.game_state == ENUMS.GAME_STATE.TAP_TO_PLAY)then
+        if (self.game_state == ENUMS.GAME_STATE.TAP_TO_PLAY) then
             self.views.btn_restart:set_enabled(false)
             self.views.btn_up:set_enabled(false)
-        elseif(self.game_state == ENUMS.GAME_STATE.GAME)then
+            self.views.btn_play:set_enabled(true)
+        elseif (self.game_state == ENUMS.GAME_STATE.GAME) then
+            gui.set_enabled(self.vh.lbl_highscore, false)
             self.views.lbl_score:set_value(WORLD.game.state.score, true)
             self.views.btn_play:set_enabled(false)
             self.views.btn_restart:set_enabled(true)
             self.views.btn_up:set_enabled(true)
-        elseif(self.game_state == ENUMS.GAME_STATE.WIN)then
+        elseif (self.game_state == ENUMS.GAME_STATE.WIN) then
+            if (WORLD.storage.game.game.highscore > self.highscore) then
+                self.highscore = WORLD.storage.game.game.highscore
+                gui.set_text(self.vh.lbl_highscore, COMMON.LOCALIZATION.highscore_new_lbl{ score = self.highscore })
+            else
+                gui.set_text(self.vh.lbl_highscore, COMMON.LOCALIZATION.highscore_lbl{ score = self.highscore })
+            end
+
             self.views.btn_restart:set_enabled(false)
             self.views.btn_up:set_enabled(false)
             self.views.btn_play:set_enabled(true)
+            self.views.btn_play:set_ignore_input(true)
+            gui.set_enabled(self.vh.lbl_highscore,true)
+            gui.set_color(self.vh.lbl_highscore,vmath.vector4(0,0,0,0))
+            gui.set_color(self.views.btn_play.vh.root,vmath.vector4(1,1,1,0))
+            gui.animate(self.vh.lbl_highscore, "color", vmath.vector4(0,0,0,1), gui.EASING_INQUAD, 1,0.4)
+            gui.animate(self.views.btn_play.vh.root, "color", vmath.vector4(1), gui.EASING_INQUAD, 1,0.4,function ()
+                self.views.btn_play:set_ignore_input(false)
+            end)
         end
     end
 
@@ -138,9 +157,9 @@ function Script:game_start()
 end
 
 function Script:update(dt)
-    BaseGuiScript.update(self,dt)
+    BaseGuiScript.update(self, dt)
     self.views.lbl_score:update(dt)
-    gui.set_text(self.vh.lbl_timer,math.ceil(math.min(WORLD.balance.config.timer_gui_max,WORLD.game.state.timer)))
+    gui.set_text(self.vh.lbl_timer, math.ceil(math.min(WORLD.balance.config.timer_gui_max, WORLD.game.state.timer)))
     for i = #self.views.score_labels, 1, -1 do
         local v = self.views.score_labels[i]
         v:update(dt)
@@ -148,7 +167,6 @@ function Script:update(dt)
     end
     self:game_state_changed()
 end
-
 
 function Script:on_input(action_id, action)
     local action_new = COMMON.LUME.clone_deep(action)
@@ -160,6 +178,5 @@ function Script:on_input(action_id, action)
     if (self.views.btn_up:on_input(action_id, action_new)) then return true end
     if (self.views.btn_play:on_input(action_id, action_new)) then return true end
 end
-
 
 COMMON.N28S.register_scripts({ SoundMusicScript(), Script() })

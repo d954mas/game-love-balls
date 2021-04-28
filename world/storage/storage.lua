@@ -12,7 +12,7 @@ local TAG = "Storage"
 local Storage = COMMON.class("Storage")
 
 Storage.FILE_PATH = "d954mas_love"
-Storage.VERSION = 17
+Storage.VERSION = 18
 Storage.AUTOSAVE = 30 --seconds
 Storage.CLEAR = CONSTANTS.VERSION_IS_DEV and false --BE CAREFUL. Do not use in prod
 Storage.LOCAL = CONSTANTS.VERSION_IS_DEV and CONSTANTS.PLATFORM_IS_PC
@@ -105,11 +105,7 @@ function Storage:_init_storage()
             mana = 0
         },
         game = {
-            last_time = os.time(),
-            light_source = { level = -1 }, --level == -1 game is not started.
-            upgrades = {},
-            tiles = { },
-            inventory = {}
+            highscore = 0
         },
         version = Storage.VERSION
     }
@@ -119,7 +115,7 @@ function Storage:_migration()
     if (self.data.version < Storage.VERSION) then
         COMMON.i(string.format("migrate from:%s to %s", self.data.version, Storage.VERSION), TAG)
 
-        if (self.data.version < 17) then
+        if (self.data.version < 18) then
             self:_init_storage()
         end
 

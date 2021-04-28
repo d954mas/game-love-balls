@@ -9,4 +9,11 @@ function Storage:initialize(...)
     self.game = self.storage.data.game
 end
 
+function Storage:highscore_change(score)
+    if score > self.game.highscore then
+        self.game.highscore = score
+        self:save_and_changed()
+    end
+end
+
 return Storage

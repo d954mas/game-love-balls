@@ -9,7 +9,7 @@ function Balance:initialize(world)
         love_balls_start_count = 40,
         -- have extra 2 second. Balls fallow
         --gui show only 60
-        timer = 61.5,
+        timer = 5,--61.5,
         timer_gui_max = 60
     }
     self.love_ball_spawn_poses = {}

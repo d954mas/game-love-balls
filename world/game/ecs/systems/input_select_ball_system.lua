@@ -16,59 +16,59 @@ function System:init()
         local game = self.world.game_world.game
         local input = game.input
         local world_pos = CAMERAS.game_camera:screen_to_world_2d(action.screen_x, action.screen_y)
-        if (action.pressed) then
-            for _, ball in ipairs(game.love_balls_selected) do
-                ball.selected = false
-                ball.can_selected = false
-            end
-            game.love_balls_selected = {}
-            local selected_balls = self:balls_found(world_pos.x, world_pos.y, 35)
-            if (#selected_balls >= 1) then
-                local ball = selected_balls[1]
-                ball.selected = true
-                table.insert(game.love_balls_selected, ball)
-            end
-        elseif (action.released) then
-            game:love_balls_take()
-        else
-
-            if (#game.love_balls_selected > 0) then
-                local start_ball = game.love_balls_selected[#game.love_balls_selected]
-
-                for _, ball in pairs(self.world.game_world.game.ecs_game.entities.love_balls_map) do
+        if (game.state.state == ENUMS.GAME_STATE.GAME) then
+            if (action.pressed) then
+                for _, ball in ipairs(game.love_balls_selected) do
+                    ball.selected = false
                     ball.can_selected = false
                 end
-
-                --select new ball if can
+                game.love_balls_selected = {}
                 local selected_balls = self:balls_found(world_pos.x, world_pos.y, 35)
                 if (#selected_balls >= 1) then
                     local ball = selected_balls[1]
-                    if (ball.love_ball.type == start_ball.love_ball.type and not ball.selected) then
-                        local dx = start_ball.position.x - ball.position.x
-                        local dy = start_ball.position.y - ball.position.y
-                        local dist = math.sqrt(dx * dx + dy * dy)
-                        if(dist<self.dist)then
-                            ball.selected = true
-                            table.insert(game.love_balls_selected, ball)
-                            start_ball = ball
-                        end
-                    end
-                    --return to prev_ball
-                    if(#game.love_balls_selected >= 2)then
-                        local prev_ball = game.love_balls_selected[#game.love_balls_selected-1]
-                        if(ball == prev_ball)then
-                            local removed_ball = table.remove(game.love_balls_selected)
-                            removed_ball.selected = false
-                        end
-                    end
+                    ball.selected = true
+                    table.insert(game.love_balls_selected, ball)
                 end
+            elseif (action.released) then
+                game:love_balls_take()
+            else
+                if (#game.love_balls_selected > 0) then
+                    local start_ball = game.love_balls_selected[#game.love_balls_selected]
 
+                    for _, ball in pairs(self.world.game_world.game.ecs_game.entities.love_balls_map) do
+                        ball.can_selected = false
+                    end
 
-                start_ball = game.love_balls_selected[#game.love_balls_selected]
-                selected_balls = self:balls_found(start_ball.position.x, start_ball.position.y, self.dist)
-                for _, ball in ipairs(selected_balls) do
-                    if (ball.love_ball.type == start_ball.love_ball.type) then
-                        ball.can_selected = true
+                    --select new ball if can
+                    local selected_balls = self:balls_found(world_pos.x, world_pos.y, 35)
+                    if (#selected_balls >= 1) then
+                        local ball = selected_balls[1]
+                        if (ball.love_ball.type == start_ball.love_ball.type and not ball.selected) then
+                            local dx = start_ball.position.x - ball.position.x
+                            local dy = start_ball.position.y - ball.position.y
+                            local dist = math.sqrt(dx * dx + dy * dy)
+                            if (dist < self.dist) then
+                                ball.selected = true
+                                table.insert(game.love_balls_selected, ball)
+                                start_ball = ball
+                            end
+                        end
+                        --return to prev_ball
+                        if (#game.love_balls_selected >= 2) then
+                            local prev_ball = game.love_balls_selected[#game.love_balls_selected - 1]
+                            if (ball == prev_ball) then
+                                local removed_ball = table.remove(game.love_balls_selected)
+                                removed_ball.selected = false
+                            end
+                        end
+                    end
+
+                    start_ball = game.love_balls_selected[#game.love_balls_selected]
+                    selected_balls = self:balls_found(start_ball.position.x, start_ball.position.y, self.dist)
+                    for _, ball in ipairs(selected_balls) do
+                        if (ball.love_ball.type == start_ball.love_ball.type) then
+                            ball.can_selected = true
+                        end
                     end
                 end
             end

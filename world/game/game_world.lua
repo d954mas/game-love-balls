@@ -46,8 +46,8 @@ end
 
 function GameWorld:init()
     self.ecs_game:add_systems()
-    timer.delay(0,false,function ()
-        self:start_game()
+    timer.delay(0, false, function()
+        -- self:start_game()
     end)
 end
 
@@ -160,6 +160,11 @@ function GameWorld:update(dt)
     self.ecs_game:update(dt)
     if (self.state.state == ENUMS.GAME_STATE.GAME) then
         self.state.timer = self.state.timer - dt
+        if (self.state.timer <= 0) then
+            self.state.timer = 0
+            self.state.state = ENUMS.GAME_STATE.WIN
+            self:love_balls_take()
+        end
     end
 end
 

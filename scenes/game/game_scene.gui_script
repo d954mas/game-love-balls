@@ -3,6 +3,7 @@ local WORLD = require "world.world"
 local GUI = require "libs_project.gui.gui"
 local CAMERAS = require "libs_project.cameras"
 local ACTIONS = require "libs.actions.actions"
+local ENUMS = require "world.enums.enums"
 local SoundMusicScript = require "libs.scripts.sound_music_gui_script"
 local BaseGuiScript = require "libs_project.scripts.base_gui_script"
 
@@ -73,6 +74,7 @@ function Script:bind_vh()
     self.views = {
         lbl_score = GUI.TickLbl(assert(gui.get_node("lbl_score"))),
         btn_restart = GUI.ButtonScale("btn_restart"),
+        btn_play = GUI.ButtonScale("btn_play"),
         btn_up = GUI.ButtonScale("btn_up"),
         progress_love = GUI.ProgressBar("progress_love"),
         score_labels = {}
@@ -93,6 +95,30 @@ function Script:init_gui()
     self.views.btn_up:set_input_listener(function()
         WORLD.game:love_balls_up()
     end)
+    self.views.btn_play:set_input_listener(function()
+        WORLD.game:restart_game()
+    end)
+    self:game_state_changed()
+end
+
+function Script:game_state_changed()
+    if(self.game_state ~= WORLD.game.state.state)then
+        self.game_state = WORLD.game.state.state
+        if(self.game_state == ENUMS.GAME_STATE.TAP_TO_PLAY)then
+            self.views.btn_restart:set_enabled(false)
+            self.views.btn_up:set_enabled(false)
+        elseif(self.game_state == ENUMS.GAME_STATE.GAME)then
+            self.views.lbl_score:set_value(WORLD.game.state.score, true)
+            self.views.btn_play:set_enabled(false)
+            self.views.btn_restart:set_enabled(true)
+            self.views.btn_up:set_enabled(true)
+        elseif(self.game_state == ENUMS.GAME_STATE.WIN)then
+            self.views.btn_restart:set_enabled(false)
+            self.views.btn_up:set_enabled(false)
+            self.views.btn_play:set_enabled(true)
+        end
+    end
+
 end
 
 function Script:score_change_animate(config)
@@ -108,8 +134,7 @@ function Script:score_change_animate(config)
 end
 
 function Script:game_start()
-    self.views.lbl_score:set_value(0, true)
-    gui.set_text(self.vh.lbl_timer,math.ceil(math.min(WORLD.balance.config.timer_gui_max,WORLD.game.state.timer)))
+
 end
 
 function Script:update(dt)
@@ -121,6 +146,7 @@ function Script:update(dt)
         v:update(dt)
         if (v.remove) then table.remove(self.views.score_labels, i) end
     end
+    self:game_state_changed()
 end
 
 
@@ -132,6 +158,7 @@ function Script:on_input(action_id, action)
 
     if (self.views.btn_restart:on_input(action_id, action_new)) then return true end
     if (self.views.btn_up:on_input(action_id, action_new)) then return true end
+    if (self.views.btn_play:on_input(action_id, action_new)) then return true end
 end
 
 

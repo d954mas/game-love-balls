@@ -47,6 +47,10 @@ function EcsWorld:clear()
     self.ecs:refresh()
 end
 
+function EcsWorld:refresh()
+    self.ecs:refresh()
+end
+
 function EcsWorld:add(...)
     self.ecs:add(...)
 end

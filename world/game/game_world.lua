@@ -175,9 +175,12 @@ function GameWorld:update(dt)
         if (self.state.timer <= 0) then
             self.state.timer = 0
             self.state.state = ENUMS.GAME_STATE.WIN
-            self.world.storage.game:highscore_change(self.state.score)
             self:love_balls_take()
+            --added new entities after ball take.
+            --without refresh they will be added on next frame
+            self.ecs_game:refresh()
             self:love_balls_explode_all()
+            self.world.storage.game:highscore_change(self.state.score)
         end
     end
 end

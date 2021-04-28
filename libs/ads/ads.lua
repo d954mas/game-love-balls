@@ -93,10 +93,10 @@ function Ads:show_interstitial_ad(ad_placement, cb)
             yagames.adv_show_fullscreen_adv({
                 open = function()
                     ANALYTICS:ad_rewarded_show("yagames", ad_placement)
-                    if (cb) then cb(true) end
+                   -- if (cb) then cb(true) end
                 end,
                 close = function()
-                    if (cb) then cb(false, "close") end
+                    if (cb) then cb(true, "close") end
                 end,
                 offline = function()
                     if (cb) then cb(false, "offline") end

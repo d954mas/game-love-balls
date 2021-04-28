@@ -9,7 +9,7 @@ textures {
 }
 textures {
   name: "bg"
-  texture: "/assets/images/game/bg.atlas"
+  texture: "/assets/images/game/bg_atlas.atlas"
 }
 background_color {
   x: 0.0

@@ -164,21 +164,21 @@
 	{{/DEFOLD_SCALE_MODE_IS_DOWNSCALE_FIT}}
 	{{#DEFOLD_SCALE_MODE_IS_STRETCH}}
 		//Stretch
-		//width = innerWidth;
-		//height = innerHeight;
+		width = innerWidth;
+		height = innerHeight;
 		//Fit
-		if (actualRatio > targetRatio) {
-			width = innerHeight * targetRatio;
-			height = innerHeight;
-			app_container.style.marginLeft = ((innerWidth - width) / 2) + "px";
-			app_container.style.marginTop = "0px";
-		}
-		else {
-			width = innerWidth;
-			height = innerHeight;
+		//if (actualRatio > targetRatio) {
+		//	width = innerHeight * targetRatio;
+		//	height = innerHeight;
+		//	app_container.style.marginLeft = ((innerWidth - width) / 2) + "px";
+		//	app_container.style.marginTop = "0px";
+		//}
+		//else {
+		//	width = innerWidth;
+		//	height = innerHeight;
 			//app_container.style.marginLeft = "0px";
 			//app_container.style.marginTop = ((innerHeight - height) / 2) + "px";
-		}
+		//}
 
 	{{/DEFOLD_SCALE_MODE_IS_STRETCH}}
 	{{#DEFOLD_SCALE_MODE_IS_FIT}}

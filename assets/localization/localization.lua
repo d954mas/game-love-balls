@@ -9,7 +9,7 @@ local FALLBACK = DEFAULT
 
 ---@class Localization
 local M = {
-	highscore_lbl = { en = "HIGHSCORE\n%{score}", ru = "РЕКОРД\n{score}" },
+	highscore_lbl = { en = "HIGHSCORE\n%{score}", ru = "РЕКОРД\n%{score}" },
 	highscore_new_lbl = { en = "NEW HIGHSCORE\n%{score}", ru = "НОВЫЙ РЕКОРД\n%{score}" },
 
 }

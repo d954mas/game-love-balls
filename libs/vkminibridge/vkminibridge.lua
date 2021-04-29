@@ -73,11 +73,18 @@ function M.send(method, params)
 	html5.run(string.format("vkBridge.send('%s', %s)", method, params))
 end
 
+function M.interstitial_native()
+	print("vk interstitial_native")
+	html5.run('vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})'
+	..'.then(data => JsToDef.send("AdsResult", {success:true})).catch(error => JsToDef.send("AdsResult", {success:false,error:error}))')
+end
+
 function M.supports(method)
 	if not M.is_initialized then 
 		return 
 	end
-	return html5.run(string.format("vkBridge.supports('%s')", method))
+	local result = html5.run(string.format("vkBridge.supports('%s')", method))
+	return result == "true" or result == true
 end
 
 function M.is_web_view()

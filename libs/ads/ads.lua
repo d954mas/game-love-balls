@@ -28,8 +28,10 @@ end
 function Ads:on_event(event)
     local message_id = event.message_id
     local message = event.message
-    print("ADS EVENT. message_id:" .. message_id .. " message:")
-    pprint(message)
+    print("ADS EVENT. message_id:" .. message_id)
+    if(message_id == "AdsResult")then
+        self:callback_execute()
+    end
 end
 
 function Ads:callback_save(cb)
@@ -123,12 +125,12 @@ function Ads:show_interstitial_ad(ad_placement, cb)
                 self:callback_save(cb)
             end
             gdsdk.show_interstitial_ad()
-            ANALYTICS:ad_rewarded_show("gdsdk", ad_placement)
+            ANALYTICS:ad_interstitial("gdsdk", ad_placement)
             --  if (cb) then cb(true) end
         elseif (yagames_private) then
             yagames.adv_show_fullscreen_adv({
                 open = function()
-                    ANALYTICS:ad_rewarded_show("yagames", ad_placement)
+                    ANALYTICS:ad_interstitial("yagames", ad_placement)
                     -- if (cb) then cb(true) end
                 end,
                 close = function()
@@ -142,7 +144,26 @@ function Ads:show_interstitial_ad(ad_placement, cb)
                 end
             })
         elseif (COMMON.CONSTANTS.TARGET_IS_VK_GAMES) then
+            COMMON.i("interstitial_ad show vk", TAG)
+            if (self.callback) then
+                COMMON.w("can't show already have callback")
+                if (cb) then cb(false, "callback exist") end
+                return
+            else
+                if (VK.is_initialized) then
+                    if(VK.supports("VKWebAppShowNativeAds"))then
+                        self:callback_save(cb)
+                        VK.interstitial_native()
+                        ANALYTICS:ad_interstitial("vk", ad_placement)
+                    else
+                        COMMON.w("not supported")
+                        if (cb) then cb(false, "not supported") end
+                    end
+                else
+                    if (cb) then cb(false, "not inited") end
+                end
 
+            end
         else
             COMMON.i("interstitial_ad no provider")
             if (cb) then cb(false, "no provider") end

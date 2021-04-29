@@ -1,0 +1,6 @@
+[localization]
+force_locale = ru
+
+[game]
+target = vk_games
+

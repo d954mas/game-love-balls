@@ -57,7 +57,7 @@ function Script:init()
         COMMON.FEATURES:debug_config()
     end
     if (jstodef) then
-        jstodef.add_listener(function(_,message_id, message)
+        jstodef.add_listener(function(_, message_id, message)
             COMMON.EVENT_BUS:event(COMMON.EVENTS.JSTODEF, { message_id = message_id, message = message })
         end)
     end
@@ -75,8 +75,6 @@ function Script:init()
     self:input_init()
     self:init_msg()
 
-    SOUNDS:on_storage_changed()
-    SOUNDS:play_music(SOUNDS.music.main)
     collectgarbage()
     collectgarbage()
 
@@ -91,6 +89,8 @@ function Script:init()
         self.test_runner = require("tests.tests") -- run tests
         self.test_runner.run()
     end
+    --fixed set group gain
+    SOUNDS:on_storage_changed()
     SOUNDS:play_music(SOUNDS.music.main)
 end
 

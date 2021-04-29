@@ -21,6 +21,7 @@ function Sounds:initialize()
                               :go_distinct(self.scheduler):subscribe(function()
         self:on_storage_changed()
     end)
+    self.master_gain = 1
     ---@type GameWorld
     self.world = nil
 end
@@ -28,27 +29,17 @@ end
 function Sounds:on_storage_changed()
     sound.set_group_gain(COMMON.HASHES.hash("sound"), self.world.storage.options:sound_get() and 1 or 0)
     sound.set_group_gain(COMMON.HASHES.hash("music"), self.world.storage.options:music_get() and 1 or 0)
-
 end
 
 function Sounds:pause()
     COMMON.i("pause", TAG)
-    self.gain_music = sound.get_group_gain(COMMON.HASHES.hash("music"))
-    self.gain_sound = sound.get_group_gain(COMMON.HASHES.hash("sound"))
-    sound.set_group_gain(COMMON.HASHES.hash("music"), 0)
-    sound.set_group_gain(COMMON.HASHES.hash("sound"), 0)
+    self.master_gain = sound.get_group_gain(COMMON.HASHES.hash("master"))
+    sound.set_group_gain(COMMON.HASHES.hash("master"), 0)
 end
 
 function Sounds:resume()
     COMMON.i("resume", TAG)
-    if (self.gain_music) then
-        sound.set_group_gain(COMMON.HASHES.hash("music"), self.gain_music)
-        self.gain_music = nil
-    end
-    if (self.gain_sound) then
-        sound.set_group_gain(COMMON.HASHES.hash("sound"), self.gain_sound)
-        self.gain_sound = nil
-    end
+    sound.set_group_gain(COMMON.HASHES.hash("master"), self.master_gain)
 end
 
 function Sounds:update(dt)
@@ -84,7 +75,7 @@ function Sounds:play_music(music_obj)
 end
 
 function Sounds:play_love_balls_take()
-    local idx =math.random(1, 3)
+    local idx = math.random(1, 3)
     self:play_sound(self.sounds["take_" .. idx])
 end
 

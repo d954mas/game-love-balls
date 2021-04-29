@@ -114,7 +114,8 @@ function Ads:gdsdk_init()
 end
 
 function Ads:show_interstitial_ad(ad_placement, cb)
-    if (os.clock() > self.interstitial_ad_next_time) then
+    --gd sdk managed time delay by itself
+    if (os.clock() > self.interstitial_ad_next_time or COMMON.CONSTANTS.TARGET_IS_GAME_DISTRIBUTION) then
         COMMON.i("interstitial_ad show", TAG)
         if (gdsdk) then
             if (self.callback) then

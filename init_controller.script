@@ -56,6 +56,11 @@ function Script:init()
     else
         COMMON.FEATURES:debug_config()
     end
+    if (jstodef) then
+        jstodef.add_listener(function(message_id, message)
+            COMMON.EVENT_BUS:event(COMMON.EVENTS.JSTODEF, { message_id = message_id, message = message })
+        end)
+    end
 
     WORLD.ads:init()
 

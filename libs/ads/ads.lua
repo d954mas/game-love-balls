@@ -5,6 +5,7 @@ local SM = COMMON.LUME.meta_getter(function() return reqf "libs_project.sm" end)
 local SOUNDS = COMMON.LUME.meta_getter(function() return reqf "libs.sounds" end)
 local SCENE_ENUMS = require "libs.sm.enums"
 local ANALYTICS = require "libs_project.analytics"
+local VK = require "libs.vkminibridge.vkminibridge"
 local TAG = "ADS"
 
 local Ads = COMMON.class("Ads")
@@ -16,6 +17,37 @@ function Ads:initialize(world)
     self.world = world
     self.interstitial_ad_next_time = 0
     self.interstitial_ad_delay = 4 * 60
+    self.callback = nil
+    self.context = nil
+    self.subscription = COMMON.RX.SubscriptionsStorage()
+    self.subscription:add(COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.JSTODEF):subscribe(function(event)
+        self:on_event(event)
+    end))
+end
+
+function Ads:on_event(event)
+    local message_id = event.message_id
+    local message = event.message
+    print("ADS EVENT. message_id:" .. message_id .. " message:")
+    pprint(message)
+end
+
+function Ads:callback_save(cb)
+    assert(not self.callback)
+    self.callback = cb
+    self.context = lua_script_instance.Get()
+end
+
+function Ads:callback_execute()
+    if (self.callback) then
+        local ctx_id = COMMON.CONTEXT:set_context_top_by_instance(self.context)
+        self.callback(true)
+        COMMON.CONTEXT:remove_context_top(ctx_id)
+        self.context = nil
+        self.callback = nil
+    else
+        COMMON.w("no callback to execute", TAG)
+    end
 end
 
 --have some problems if try to init in constructor
@@ -23,6 +55,18 @@ end
 function Ads:init()
     self:gdsdk_init()
     self:yandex_init()
+    self:vk_init()
+end
+
+function Ads:vk_init()
+    if (COMMON.CONSTANTS.TARGET_IS_VK_GAMES) then
+        COMMON.i("vk games init start", TAG)
+        VK.init(nil, function()
+            COMMON.i("vk games init", TAG)
+            -- Sends event to client
+            VK.send('VKWebAppInit', {})
+        end)
+    end
 end
 
 function Ads:yandex_init()
@@ -53,12 +97,8 @@ function Ads:gdsdk_init()
                     scene:pause()
                 end
             elseif event == gdsdk.SDK_GAME_START then
-                if (self.gdsdk_callback) then
-                    local ctx_id = COMMON.CONTEXT:set_context_top_by_instance(self.gdsdk_context)
-                    self.gdsdk_callback(true)
-                    COMMON.CONTEXT:remove_context_top(ctx_id)
-                    self.gdsdk_callback = nil
-                    self.gdsdk_context = nil
+                if (self.callback) then
+                    self:callback_execute()
                 end
 
                 SOUNDS:resume()
@@ -68,9 +108,6 @@ function Ads:gdsdk_init()
                 end
             end
         end)
-        --can have only one callback
-        --when get SDK_GAME_START event. That mean that ad was show
-        self.gdsdk_callback = nil
     end
 end
 
@@ -78,13 +115,12 @@ function Ads:show_interstitial_ad(ad_placement, cb)
     if (os.clock() > self.interstitial_ad_next_time) then
         COMMON.i("interstitial_ad show", TAG)
         if (gdsdk) then
-            if (self.gdsdk_callback) then
+            if (self.callback) then
                 COMMON.w("can't show already have callback")
                 if (cb) then cb(false, "callback exist") end
                 return
             else
-                self.gdsdk_callback = cb
-                self.gdsdk_context = lua_script_instance.Get()
+                self:callback_save(cb)
             end
             gdsdk.show_interstitial_ad()
             ANALYTICS:ad_rewarded_show("gdsdk", ad_placement)
@@ -93,7 +129,7 @@ function Ads:show_interstitial_ad(ad_placement, cb)
             yagames.adv_show_fullscreen_adv({
                 open = function()
                     ANALYTICS:ad_rewarded_show("yagames", ad_placement)
-                   -- if (cb) then cb(true) end
+                    -- if (cb) then cb(true) end
                 end,
                 close = function()
                     if (cb) then cb(true, "close") end
@@ -105,6 +141,8 @@ function Ads:show_interstitial_ad(ad_placement, cb)
                     if (cb) then cb(false, "error") end
                 end
             })
+        elseif (COMMON.CONSTANTS.TARGET_IS_VK_GAMES) then
+
         else
             COMMON.i("interstitial_ad no provider")
             if (cb) then cb(false, "no provider") end
@@ -119,13 +157,12 @@ end
 function Ads:rewarded_ad_show(ad_placement, cb)
     COMMON.i("rewarded_ad show", TAG)
     if (gdsdk) then
-        if (self.gdsdk_callback) then
+        if (self.callback) then
             COMMON.w("can't show already have callback")
             if (cb) then cb(false, "callback exist") end
             return
         else
-            self.gdsdk_callback = cb
-            self.gdsdk_context = lua_script_instance.Get()
+            self:callback_save(cb)
         end
         gdsdk.show_rewarded_ad()
         ANALYTICS:ad_rewarded_show("gdsdk", ad_placement)

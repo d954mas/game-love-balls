@@ -120,7 +120,8 @@ function Ads:show_interstitial_ad(ad_placement, cb)
         if (gdsdk) then
             if (self.callback) then
                 COMMON.w("can't show already have callback")
-                if (cb) then cb(false, "callback exist") end
+                --multiple tryes
+               -- if (cb) then cb(false, "callback exist") end
                 return
             else
                 self:callback_save(cb)
@@ -148,7 +149,8 @@ function Ads:show_interstitial_ad(ad_placement, cb)
             COMMON.i("interstitial_ad show vk", TAG)
             if (self.callback) then
                 COMMON.w("can't show already have callback")
-                if (cb) then cb(false, "callback exist") end
+                --multiple tryes
+                -- if (cb) then cb(false, "callback exist") end
                 return
             else
                 if (VK.is_initialized) then

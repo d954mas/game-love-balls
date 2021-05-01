@@ -31,7 +31,8 @@ M.TARGETS = {
     POKI = "poki",
     ITCH_IO = "itch_io",
     YANDEX_GAMES = "yandex_games",
-    VK_GAMES = "vk_games"
+    VK_GAMES = "vk_games",
+    FB_INSTANT = "fb_instant"
 }
 
 assert(lume.find(M.TARGETS, M.GAME_TARGET), "unknown target:" .. M.GAME_TARGET)
@@ -43,6 +44,7 @@ M.TARGET_IS_POKI = M.GAME_TARGET == M.TARGETS.POKI
 M.TARGET_IS_ITCH_IO = M.GAME_TARGET == M.TARGETS.ITCH_IO
 M.TARGET_IS_YANDEX_GAMES = M.GAME_TARGET == M.TARGETS.YANDEX_GAMES
 M.TARGET_IS_VK_GAMES= M.GAME_TARGET == M.TARGETS.VK_GAMES
+M.TARGET_IS_FB_INSTANT = M.GAME_TARGET == M.TARGETS.FB_INSTANT
 
 M.IS_TESTS = sys.get_config("tests.tests_run")
 

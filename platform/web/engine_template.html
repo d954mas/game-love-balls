@@ -90,7 +90,11 @@
 	<!-- -->
 	<script id='engine-loader' type='text/javascript' src="dmloader.js"></script>
 	<!-- -->
-	<script type='text/javascript' src="GameAnalytics.js"></script>
+
+	<script id='prepare-html' type='text/javascript'>
+		var game_target = "{{game.target}}"
+	</script>
+
 	<script id='engine-setup' type='text/javascript'>
 	var extra_params = {
 		archive_location_filter: function( path ) {

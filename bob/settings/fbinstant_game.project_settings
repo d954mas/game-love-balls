@@ -1,0 +1,5 @@
+[project]
+dependencies = https://github.com/AGulev/jstodef/archive/1.3.0.zip,https://github.com/DanEngelbrecht/LuaScriptInstance/archive/master.zip,https://github.com/GameAnalytics/GA-SDK-DEFOLD/archive/3.3.10.zip,https://github.com/GameAnalytics/defold-openssl/archive/master.zip,https://github.com/defold/extension-fbinstant/archive/refs/tags/7.0.1.zip
+
+[game]
+target = fb_instant

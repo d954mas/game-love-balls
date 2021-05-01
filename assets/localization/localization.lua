@@ -11,6 +11,8 @@ local FALLBACK = DEFAULT
 local M = {
 	highscore_lbl = { en = "HIGHSCORE\n%{score}", ru = "РЕКОРД\n%{score}" },
 	highscore_new_lbl = { en = "NEW HIGHSCORE\n%{score}", ru = "НОВЫЙ РЕКОРД\n%{score}" },
+	share_score_vk = { en = "Я получил %{score} симпатий в игре Шары Любви Аниме Девушки (vk.com/app7841255_16253997). Сможешь больше?" ..
+                "\n#vkgames #directgames\"" },
 
 }
 

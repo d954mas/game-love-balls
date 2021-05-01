@@ -4,6 +4,7 @@ local GameWorld = require "world.game.game_world"
 local CommandExecutor = require "world.commands.command_executor"
 local Balance = require "world.balance.balance"
 local Ads = require "libs.ads.ads"
+local Sdk = require "libs.sdk.sdk"
 local Utils = require "world.utils.utils"
 local SOUNDS = require "libs.sounds"
 
@@ -20,6 +21,7 @@ function M:initialize()
     self.balance = Balance(self)
     self.game = GameWorld(self)
     self.ads = Ads(self)
+    self.sdk = Sdk(self)
     self.utils = Utils(self)
     self.sounds = SOUNDS
     self.sounds.world = self

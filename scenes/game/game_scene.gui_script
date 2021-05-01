@@ -76,6 +76,7 @@ function Script:bind_vh()
         btn_restart = GUI.ButtonScale("btn_restart"),
         btn_play = GUI.ButtonScale("btn_play"),
         btn_up = GUI.ButtonScale("btn_up"),
+        btn_share = GUI.ButtonScale("btn_share"),
         progress_love = GUI.ProgressBar("progress_love"),
         score_labels = {}
     }
@@ -88,11 +89,11 @@ function Script:init_gui()
     self.views.lbl_score.animation_config.time = 0.5
     self.views.lbl_score.animation_config.easing = "linear"
     self.views.lbl_score:set_value(0, true)
-    gui.set_text(self.vh.lbl_highscore, COMMON.LOCALIZATION.highscore_lbl{ score = self.highscore })
+    gui.set_text(self.vh.lbl_highscore, COMMON.LOCALIZATION.highscore_lbl { score = self.highscore })
     self.views.progress_love:set_value_max(100)
     self.views.progress_love:set_value(0, true)
     self.views.btn_restart:set_input_listener(function()
-        WORLD.ads:show_interstitial_ad("btn_restart",function ()
+        WORLD.ads:show_interstitial_ad("btn_restart", function()
             WORLD.game:restart_game()
         end)
     end)
@@ -100,10 +101,12 @@ function Script:init_gui()
         WORLD.game:love_balls_up()
     end)
     self.views.btn_play:set_input_listener(function()
-        WORLD.ads:show_interstitial_ad("btn_play",function ()
+        WORLD.ads:show_interstitial_ad("btn_play", function()
             WORLD.game:restart_game()
         end)
-
+    end)
+    self.views.btn_share:set_input_listener(function()
+        WORLD.sdk:share(COMMON.LOCALIZATION.share_score_vk({ score = WORLD.game.state.score }))
     end)
     self:game_state_changed()
 end
@@ -115,30 +118,38 @@ function Script:game_state_changed()
             self.views.btn_restart:set_enabled(false)
             self.views.btn_up:set_enabled(false)
             self.views.btn_play:set_enabled(true)
+            self.views.btn_share:set_enabled(false)
         elseif (self.game_state == ENUMS.GAME_STATE.GAME) then
             gui.set_enabled(self.vh.lbl_highscore, false)
             self.views.lbl_score:set_value(WORLD.game.state.score, true)
             self.views.btn_play:set_enabled(false)
             self.views.btn_restart:set_enabled(true)
             self.views.btn_up:set_enabled(true)
+            self.views.btn_share:set_enabled(false)
         elseif (self.game_state == ENUMS.GAME_STATE.WIN) then
             if (WORLD.storage.game.game.highscore > self.highscore) then
                 self.highscore = WORLD.storage.game.game.highscore
-                gui.set_text(self.vh.lbl_highscore, COMMON.LOCALIZATION.highscore_new_lbl{ score = self.highscore })
+                gui.set_text(self.vh.lbl_highscore, COMMON.LOCALIZATION.highscore_new_lbl { score = self.highscore })
             else
-                gui.set_text(self.vh.lbl_highscore, COMMON.LOCALIZATION.highscore_lbl{ score = self.highscore })
+                gui.set_text(self.vh.lbl_highscore, COMMON.LOCALIZATION.highscore_lbl { score = self.highscore })
             end
 
             self.views.btn_restart:set_enabled(false)
             self.views.btn_up:set_enabled(false)
             self.views.btn_play:set_enabled(true)
             self.views.btn_play:set_ignore_input(true)
-            gui.set_enabled(self.vh.lbl_highscore,true)
-            gui.set_color(self.vh.lbl_highscore,vmath.vector4(0,0,0,0))
-            gui.set_color(self.views.btn_play.vh.root,vmath.vector4(1,1,1,0))
-            gui.animate(self.vh.lbl_highscore, "color", vmath.vector4(0,0,0,1), gui.EASING_INQUAD, 1,0.4)
-            gui.animate(self.views.btn_play.vh.root, "color", vmath.vector4(1), gui.EASING_INQUAD, 1,0.4,function ()
+            self.views.btn_share:set_ignore_input(true)
+            self.views.btn_share:set_enabled(COMMON.CONSTANTS.TARGET_IS_VK_GAMES)
+            gui.set_enabled(self.vh.lbl_highscore, true)
+            gui.set_color(self.vh.lbl_highscore, vmath.vector4(0, 0, 0, 0))
+            gui.set_color(self.views.btn_play.vh.root, vmath.vector4(1, 1, 1, 0))
+            gui.set_color(self.views.btn_share.vh.root, vmath.vector4(1, 1, 1, 0))
+            gui.animate(self.vh.lbl_highscore, "color", vmath.vector4(0, 0, 0, 1), gui.EASING_INQUAD, 1, 0.4)
+            gui.animate(self.views.btn_play.vh.root, "color", vmath.vector4(1), gui.EASING_INQUAD, 1, 0.4, function()
                 self.views.btn_play:set_ignore_input(false)
+            end)
+            gui.animate(self.views.btn_share.vh.root, "color", vmath.vector4(1), gui.EASING_INQUAD, 1, 0.4, function()
+                self.views.btn_share:set_ignore_input(false)
             end)
         end
     end
@@ -180,6 +191,7 @@ function Script:on_input(action_id, action)
     action_new.y = world_coord.y * COMMON.RENDER.config_size.h / CAMERAS.game_camera.screen_size.h
 
     if (self.views.btn_restart:on_input(action_id, action_new)) then return true end
+    if (self.views.btn_share:on_input(action_id, action_new)) then return true end
     if (self.views.btn_up:on_input(action_id, action_new)) then return true end
     if (self.views.btn_play:on_input(action_id, action_new)) then return true end
 end

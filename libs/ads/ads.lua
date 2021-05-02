@@ -27,7 +27,7 @@ end
 
 function Ads:on_event(event)
     local message_id = event.message_id
-    local message = event.message
+    --local message = event.message
     print("ADS EVENT. message_id:" .. message_id)
     if(message_id == "AdsResult")then
         self:callback_execute()

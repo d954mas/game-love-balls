@@ -1,11 +1,5 @@
 local COMMON = require "libs.common"
 local TAG = "Entities"
-local ENUMS = require "world.enums.enums"
-local ACTIONS = require "libs.actions.actions"
----@type Sounds
-local SOUNDS = COMMON.LUME.meta_getter(function()
-    return reqf "libs.sounds"
-end)
 
 ---@class MoveCurveConfig
 ---@field curve Curve

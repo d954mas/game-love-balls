@@ -1,9 +1,7 @@
 local COMMON = require "libs.common"
 local EcsGame = require "world.game.ecs.game_ecs"
 local CommandExecutor = require "world.commands.command_executor"
-local COMMANDS = require "world.game.command.commands"
 local ENUMS = require "world.enums.enums"
-local CAMERAS = require "libs_project.cameras"
 
 local TAG = "GAME_WORLD"
 

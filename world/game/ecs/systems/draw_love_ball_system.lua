@@ -1,5 +1,4 @@
 local ECS = require 'libs.ecs'
-local ENUMS = require "world.enums.enums"
 local COMMON = require "libs.common"
 
 local FACTORY = msg.url("game_scene:/factories#love_ball")
@@ -44,15 +43,12 @@ local System = ECS.processingSystem()
 System.filter = ECS.filter("love_ball")
 System.name = "DrawLoveBallSystem"
 
-local V3 = vmath.vector3(0, 0, 0.1)
-
 function System:init()
 
 end
 
 ---@param e EntityGame
 function System:process(e, dt)
-    local game = self.world.game_world.game
     if (not e.love_ball_go) then
         local collection = collectionfactory.create(FACTORY,
                 vmath.vector3(e.position.x, e.position.y, 0.1),
@@ -62,9 +58,6 @@ function System:process(e, dt)
         ---@type LoveBallView
         local love_ball_go = {
             root = msg.url(assert(collection[FACTORY_IDS.ROOT])),
-            collision = {
-
-            },
             portrait = {
                 root = msg.url(assert(collection[FACTORY_IDS.PORTRAIT])),
                 sprite = nil
@@ -105,7 +98,11 @@ function System:process(e, dt)
 
         e.love_ball_go = love_ball_go
         -- apply a force of 1 Newton towards world-x at the center of the game object instance
-        msg.post(love_ball_go.collision.collision, COMMON.HASHES.hash("apply_force"), { force = vmath.vector3(COMMON.LUME.random(-0.75,0.75), -COMMON.LUME.random(1.5,2.5), 0)*10000, position = go.get_world_position(love_ball_go.root) })
+        msg.post(love_ball_go.collision.collision, COMMON.HASHES.hash("apply_force"),
+                { force = vmath.vector3(COMMON.LUME.random(-0.75, 0.75),
+                        -COMMON.LUME.random(1.5, 2.5), 0) * 10000,
+                  position = go.get_world_position(love_ball_go.root)
+                })
         sprite.play_flipbook(e.love_ball_go.portrait.sprite, COMMON.HASHES.hash("portrait_" .. e.love_ball.type))
         msg.post(love_ball_go.selected.root, COMMON.HASHES.MSG.DISABLE)
         msg.post(love_ball_go.heart_line.root, COMMON.HASHES.MSG.DISABLE)
@@ -135,15 +132,15 @@ function System:process(e, dt)
         if (e.selected) then
             alpha = 1
             --update line pos
-            local idx = COMMON.LUME.findi(selected_balls,e)
+            local idx = COMMON.LUME.findi(selected_balls, e)
             if (idx) then
                 local next = selected_balls[idx + 1]
                 if (not next) then
                     go.set_scale(vmath.vector3(0.33, 0.001, 1), e.love_ball_go.heart_line.root)
                 else
                     local dx, dy = next.position.x - e.position.x, next.position.y - e.position.y
-                    local angle = COMMON.LUME.angle_vector(dx,dy) - math.pi/2
-                    angle = angle - math.rad(go.get(e.love_ball_go.root,"euler.z"))
+                    local angle = COMMON.LUME.angle_vector(dx, dy) - math.pi / 2
+                    angle = angle - math.rad(go.get(e.love_ball_go.root, "euler.z"))
                     go.set_rotation(vmath.quat_rotation_z(angle), e.love_ball_go.heart_line.root)
                     local dist = math.sqrt(dx * dx + dy * dy)
                     go.set_scale(vmath.vector3(0.33, dist / 30, 1), e.love_ball_go.heart_line.root)

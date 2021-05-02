@@ -77,7 +77,8 @@ read_globals = {
   "physics3d",
   "gameanalytics",
   "gdsdk",
-  "yagames_private"
+  "yagames_private",
+  "html5"
 }
 
 globals = {

@@ -1,7 +1,4 @@
 local COMMON = require "libs.common"
-local ACTIONS = require "libs.actions.actions"
-local COLOR_UTILS = require "richtext.color"
-local CAMERAS = require "libs_project.cameras"
 
 local BaseGuiScript = require "libs_project.scripts.base_gui_script"
 

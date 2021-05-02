@@ -1,5 +1,4 @@
 local ECS = require 'libs.ecs'
-local ENUMS = require "world.enums.enums"
 local COMMON = require "libs.common"
 
 local FACTORY = msg.url("game_scene:/factories#love_ball_explosion")

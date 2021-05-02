@@ -9,12 +9,10 @@ System.filter = ECS.filter("input_info")
 System.name = "InputSystem"
 
 function System:init()
-    local cam = CAMERAS.game_camera
     self.input_handler = COMMON.INPUT()
     self.dist = 105
     self.input_handler:add(COMMON.HASHES.INPUT.TOUCH, function(_, _, action)
         local game = self.world.game_world.game
-        local input = game.input
         local world_pos = CAMERAS.game_camera:screen_to_world_2d(action.screen_x, action.screen_y)
         if (game.state.state == ENUMS.GAME_STATE.GAME) then
             if (action.pressed) then
@@ -50,7 +48,6 @@ function System:init()
                             if (dist < self.dist) then
                                 ball.selected = true
                                 table.insert(game.love_balls_selected, ball)
-                                start_ball = ball
                             end
                         end
                         --return to prev_ball

@@ -103,7 +103,8 @@ function System:process(e, dt)
                         -COMMON.LUME.random(1.5, 2.5), 0) * 10000,
                   position = go.get_world_position(love_ball_go.root)
                 })
-        sprite.play_flipbook(e.love_ball_go.portrait.sprite, COMMON.HASHES.hash("portrait_" .. e.love_ball.type))
+        sprite.play_flipbook(e.love_ball_go.portrait.sprite, COMMON.HASHES.hash(
+                (COMMON.CONSTANTS.IS_MAN and "man_portrait_" or "portrait_") .. e.love_ball.type))
         msg.post(love_ball_go.selected.root, COMMON.HASHES.MSG.DISABLE)
         msg.post(love_ball_go.heart_line.root, COMMON.HASHES.MSG.DISABLE)
     end

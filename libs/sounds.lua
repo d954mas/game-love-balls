@@ -11,7 +11,11 @@ function Sounds:initialize()
     self.sounds = {
         take_1 = { name = "take_1", url = msg.url("main:/sounds#take_1") },
         take_2 = { name = "take_2", url = msg.url("main:/sounds#take_2") },
-        take_3 = { name = "take_3", url = msg.url("main:/sounds#take_3") }
+        take_3 = { name = "take_3", url = msg.url("main:/sounds#take_3") },
+        man_take_1 = { name = "man_take_1", url = msg.url("main:/sounds#man_take_1") },
+        man_take_2 = { name = "man_take_2", url = msg.url("main:/sounds#man_take_2") },
+        man_take_3 = { name = "man_take_3", url = msg.url("main:/sounds#man_take_3") },
+        man_take_4 = { name = "man_take_4", url = msg.url("main:/sounds#man_take_4") }
     }
     self.music = {
         main = { name = "main", url = msg.url("main:/music#main") }
@@ -75,8 +79,14 @@ function Sounds:play_music(music_obj)
 end
 
 function Sounds:play_love_balls_take()
-    local idx = math.random(1, 3)
-    self:play_sound(self.sounds["take_" .. idx])
+    if(COMMON.CONSTANTS.IS_MAN)then
+        local idx = math.random(1, 4)
+        self:play_sound(self.sounds["man_take_" .. idx])
+    else
+        local idx = math.random(1, 3)
+        self:play_sound(self.sounds["take_" .. idx])
+    end
+
 end
 
 return Sounds()

@@ -1,0 +1,16 @@
+{
+     "resource": {
+          "mana": 0
+     },
+     "version": 18,
+     "options": {
+          "music": false,
+          "sound": true
+     },
+     "debug": {
+          "developer": true
+     },
+     "game": {
+          "highscore": 0
+     }
+}

@@ -38,13 +38,13 @@ end
 
 function Storage:_get_path()
     if (Storage.LOCAL) then
-        return "storage.json"
+        return COMMON.CONSTANTS.IS_MAN and "storage_man.json" or "storage.json"
     end
     local path = Storage.FILE_PATH
     if (CONSTANTS.VERSION_IS_DEV) then
         path = path .. "_dev"
     end
-    return sys.get_save_file(path, "storage.json")
+    return sys.get_save_file(path, COMMON.CONSTANTS.IS_MAN and "storage_man.json" or "storage.json")
 end
 
 function Storage:_load_storage()

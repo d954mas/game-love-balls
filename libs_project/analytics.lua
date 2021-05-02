@@ -15,6 +15,7 @@ function Analytics:init(config)
     if(gameanalytics)then
         gameanalytics.setEnabledInfoLog(COMMON.CONSTANTS.VERSION_IS_DEV)
         gameanalytics.setCustomDimension01(COMMON.CONSTANTS.GAME_TARGET)
+        gameanalytics.setCustomDimension02(COMMON.CONSTANTS.IS_MAN and "man" or "girl")
     else
         self.disabled = true
     end

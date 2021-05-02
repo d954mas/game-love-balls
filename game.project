@@ -145,6 +145,7 @@ build_osx = 0.01
 build_windows = 0.01
 build_linux = 0.01
 custom_dimensions_01 = editor,play_market,game_distribution,poki,itch_io,yandex_games,vk_games,fb_instant
+custom_dimensions_02 = man,girl
 
 [game]
 version = dev

@@ -4,13 +4,14 @@
      },
      "version": 18,
      "options": {
-          "music": false,
+          "music": true,
           "sound": true
      },
      "debug": {
           "developer": true
      },
      "game": {
-          "highscore": 0
+          "last_time": 65.18,
+          "highscore": 219
      }
 }

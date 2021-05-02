@@ -169,7 +169,7 @@ function Script:score_change_animate(config)
 end
 
 function Script:game_start()
-
+    self.views.lbl_score:set_value(WORLD.game.state.score, true)
 end
 
 function Script:update(dt)

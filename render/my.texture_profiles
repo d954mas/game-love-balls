@@ -1,20 +1,27 @@
 path_settings {
   path: "/assets/images/debug/**/.atlas"
-  profile: "RGBA16 UASTC"
+  profile: "UASTC BASIS No MipMaps"
 }
 path_settings {
   path: "/assets/spine/**/*.atlas"
   profile: "Default"
 }
 path_settings {
-  path: "/assets/map/images/**/*.atlas"
-  profile: "Default No MipMaps"
+  path: "/assets/images/gui/**/*.atlas"
+  profile: "UASTC BASIS No MipMaps"
+}
+path_settings {
+  path: "/assets/images/game/bg_atlas.atlas"
+  profile: "RGB BG"
+}
+path_settings {
+  path: "/assets/images/game/**/*.atlas"
+  profile: "UASTC BASIS No MipMaps"
 }
 path_settings {
   path: "**"
   profile: "Default No MipMaps"
 }
-
 profiles {
   name: "Default"
   platforms {
@@ -36,7 +43,7 @@ profiles {
     formats {
       format: TEXTURE_FORMAT_RGB_16BPP
       compression_level: FAST
-      compression_type: COMPRESSION_TYPE_DEFAULT
+      compression_type: COMPRESSION_TYPE_BASIS_UASTC
     }
     mipmaps: false
     max_texture_size: 2048
@@ -86,14 +93,16 @@ profiles {
   }
 }
 profiles {
-  name: "RGBA16 UASTC"
+  name: "UASTC BASIS No MipMaps"
   platforms {
     os: OS_ID_GENERIC
     formats {
-      format: TEXTURE_FORMAT_RGBA_16BPP
+      format: TEXTURE_FORMAT_RGBA
       compression_level: BEST
       compression_type: COMPRESSION_TYPE_BASIS_UASTC
     }
     mipmaps: false
+    max_texture_size: 2048
+    premultiply_alpha: true
   }
 }

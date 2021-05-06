@@ -62,6 +62,6 @@ M.GUI_ORDER = {
     DEBUG = 15,
 }
 
-M.IS_MAN = true
+M.IS_MAN = false
 
 return M

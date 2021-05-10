@@ -1,10 +1,14 @@
 [project]
 title = love-balls
 version = 0.0.8
-dependencies = https://github.com/AGulev/jstodef/archive/1.3.0.zip,https://github.com/DanEngelbrecht/LuaScriptInstance/archive/master.zip,https://github.com/GameAnalytics/GA-SDK-DEFOLD/archive/3.3.10.zip,https://github.com/GameAnalytics/defold-openssl/archive/master.zip
 custom_resources = 
 bundle_exclude_resources = 
 bundle_resources = assets/bundle
+dependencies#0 = https://github.com/AGulev/jstodef/archive/1.3.0.zip
+dependencies#1 = https://github.com/DanEngelbrecht/LuaScriptInstance/archive/master.zip
+dependencies#2 = https://github.com/GameAnalytics/GA-SDK-DEFOLD/archive/3.3.10.zip
+dependencies#3 = https://github.com/GameAnalytics/defold-openssl/archive/master.zip
+dependencies#4 = https://github.com/defold/extension-admob/archive/v1.0.zip
 
 [bootstrap]
 main_collection = /init.collectionc
@@ -41,7 +45,7 @@ app_manifest = /app_manifest_debug.appmanifest
 [android]
 gcm_sender_id = 
 push_field_text = 
-manifest = /builtins/manifests/android/AndroidManifest.xml
+manifest = /admob/AndroidManifest.xml
 package = com.d954mas.game.loveballs.dev
 
 [graphics]

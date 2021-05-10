@@ -55,7 +55,7 @@ platforms:
     armv7-android:
         context:
             excludeLibs: ["physics","LinearMath","BulletDynamics","BulletCollision","record","vpx"]
-            excludeJars: []
+            excludeJars: ["(.*)/google-play-services.jar", "(.*)/android-support-v4.jar"]
             excludeSymbols: []
             symbols: []
             libs: ["physics_2d","record_null"]
@@ -65,7 +65,7 @@ platforms:
     arm64-android:
         context:
             excludeLibs: ["physics","LinearMath","BulletDynamics","BulletCollision","record","vpx"]
-            excludeJars: []
+            excludeJars: ["(.*)/google-play-services.jar", "(.*)/android-support-v4.jar"]
             excludeSymbols: []
             symbols: []
             libs: ["physics_2d","record_null"]

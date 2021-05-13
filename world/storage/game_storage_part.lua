@@ -16,4 +16,8 @@ function Storage:highscore_change(score)
     end
 end
 
+function Storage:highscore_get()
+    return self.game.highscore
+end
+
 return Storage

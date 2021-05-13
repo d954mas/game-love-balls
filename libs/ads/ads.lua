@@ -56,7 +56,6 @@ end
 --gdsdk listener not worked
 function Ads:init()
     self:gdsdk_init()
-    self:yandex_init()
     self:vk_init()
 end
 
@@ -69,20 +68,6 @@ function Ads:vk_init()
             VK.send('VKWebAppInit', {})
         end)
     end
-end
-
-function Ads:yandex_init()
-    if (yagames_private) then
-        COMMON.i("yagames init start", TAG)
-        yagames.init(function(_, err)
-            if err then
-                COMMON.LOG.e("yagames init error: " .. tostring(err), TAG)
-            else
-                COMMON.LOG.e("yagames init success", TAG)
-            end
-        end)
-    end
-
 end
 
 function Ads:gdsdk_init()

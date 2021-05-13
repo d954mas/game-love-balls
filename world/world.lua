@@ -31,6 +31,8 @@ function M:initialize()
                                 :go_distinct(self.scheduler):subscribe(function()
         self:on_resize()
     end))
+
+    self.sdk:storage_restore()
 end
 
 function M:update(dt)

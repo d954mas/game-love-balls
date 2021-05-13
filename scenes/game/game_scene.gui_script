@@ -129,6 +129,8 @@ function Script:game_state_changed()
         elseif (self.game_state == ENUMS.GAME_STATE.WIN) then
             if (WORLD.storage.game.game.highscore > self.highscore) then
                 self.highscore = WORLD.storage.game.game.highscore
+                WORLD.sdk:leaderboard_push_new_score(self.highscore)
+                WORLD.sdk:storage_save()
                 gui.set_text(self.vh.lbl_highscore, COMMON.LOCALIZATION.highscore_new_lbl { score = self.highscore })
             else
                 gui.set_text(self.vh.lbl_highscore, COMMON.LOCALIZATION.highscore_lbl { score = self.highscore })

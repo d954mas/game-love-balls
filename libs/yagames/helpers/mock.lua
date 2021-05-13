@@ -65,6 +65,15 @@ function M.device_info_is_tablet()
     return false
 end
 
+-- "get_leaderboards"
+-- "leaderboards_get_description"
+-- "leaderboards_get_player_entry"
+-- "leaderboards_set_score"
+-- "leaderboards_get_entries"
+function M.get_leaderboards(cb_id)
+    M.send(cb_id, "Leaderboards is not available yet.")
+end
+
 function M.get_payments(cb_id, options)
     assert(type(options) == "string")
 
